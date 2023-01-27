@@ -4,6 +4,19 @@ export async function GetStatus(apiKey) {
   });
 }
 
+export async function StartBuild(apiKey, applicationName) {
+  return await fetch(
+    GetBasePath() +
+      "/start?apiKey=" +
+      apiKey +
+      "&applicationName=" +
+      applicationName,
+    {
+      method: "POST",
+    }
+  );
+}
+
 export function GetBasePath() {
   let requestPath = "https://ledigasalar.online/auto-builder";
   if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

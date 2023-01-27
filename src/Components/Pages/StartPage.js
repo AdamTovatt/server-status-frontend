@@ -6,37 +6,44 @@ import RatingChart from "../RatingChart";
 import DialogBox from "../DialogBox";
 import { BarLoader } from "react-spinners";
 import TextField from "../Input/TextField";
-import MatchSummary from "../MatchSummary";
+import ServerApplication from "../ServerApplication";
 import VerticalSpacing from "../VerticalSpacing";
-import { GetTimeSinceDate } from "../../Functions";
+import { GetTimeSinceDate, setCookie } from "../../Functions";
+import Cookies from "universal-cookie";
 
 const StartPage = () => {
   const [dialogText, setDialogText] = useState(null);
   const [counter, setCounter] = useState(0);
-  const [apiKey, setApiKey] = useState(null);
   const [fetchingStatus, setFetchingStatus] = useState(false);
   const [statusData, setStatusData] = useState(null);
   const [hasFetched, setHasFetched] = useState(false);
+  const [openName, setOpenName] = useState(null);
+
+  const cookies = new Cookies();
 
   useEffect(() => {
     async function FetchStatusData() {
-      if (!apiKey) return;
-
       setFetchingStatus(true);
-      let response = await GetStatus(apiKey);
+      let response = await GetStatus(cookies.get("apiKey"));
       if (response.status === 200) {
         let json = await response.json();
         console.log(json);
         setStatusData(json);
       } else if (response.status == 400) {
         setDialogText("Invalid api key");
+        setCookie("apiKey", null);
       } else {
         setDialogText("Unknown error");
       }
       setFetchingStatus(false);
     }
 
-    if (apiKey && !statusData && !fetchingStatus && !hasFetched) {
+    if (
+      cookies.get("apiKey") &&
+      !statusData &&
+      !fetchingStatus &&
+      !hasFetched
+    ) {
       FetchStatusData();
       setHasFetched(true);
     }
@@ -69,14 +76,29 @@ const StartPage = () => {
             onClose={() => {}}
           />
         )}
-        {statusData ? null : fetchingStatus ? (
+        {statusData ? (
+          <ServerApplicationContainer>
+            {statusData.applications.map((data, index) => (
+              <div key={index}>
+                <ServerApplication
+                  serverApplication={data}
+                  open={data.name === openName}
+                  onClick={() => {
+                    setOpenName(data.name);
+                  }}
+                />
+                <VerticalSpacing height={1} />
+              </div>
+            ))}
+          </ServerApplicationContainer>
+        ) : fetchingStatus ? (
           <Loader />
         ) : (
           <TextField
             type={"password"}
             onSumbit={(text) => {
               setHasFetched(false);
-              setApiKey(text);
+              setCookie("apiKey", text);
             }}
             color={Color.DarkLighter}
             placeHolder={"Enter api key..."}
@@ -87,6 +109,12 @@ const StartPage = () => {
     </Page>
   );
 };
+
+const ServerApplicationContainer = styled.div`
+  min-width: 30rem;
+  width: 60rem;
+  max-width: 80vw;
+`;
 
 const Loader = () => {
   return (
