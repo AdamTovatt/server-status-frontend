@@ -19,6 +19,7 @@ const StartPage = () => {
   const [hasFetched, setHasFetched] = useState(false);
   const [openName, setOpenName] = useState(null);
   const [apiKey, setApiKey] = useState(null);
+  const [lastRebuildTime, setLastRebuildTime] = useState(null);
 
   const cookies = new Cookies();
 
@@ -49,7 +50,10 @@ const StartPage = () => {
     const interval = setInterval(() => {
       setCounter(counter + 1);
 
-      if (counter !== 0 && counter % 5 === 0) {
+      if (
+        counter !== 0 &&
+        counter % GetUpdateFrequency(lastRebuildTime) === 0
+      ) {
         setHasFetched(false);
         //FetchStatusData();
       }
@@ -80,6 +84,7 @@ const StartPage = () => {
                 <ServerApplication
                   didRequestRebuild={() => {
                     setHasFetched(false);
+                    setLastRebuildTime(Date.now());
                   }}
                   apiKey={apiKey}
                   serverApplication={data}
@@ -111,6 +116,18 @@ const StartPage = () => {
     </Page>
   );
 };
+
+function GetUpdateFrequency(lastRebuildTime) {
+  if (!lastRebuildTime) return 10; //default frequency
+
+  let seconds = (Date.now() - new Date(lastRebuildTime)) / 1000;
+
+  if (seconds < 30) return 1;
+  else if (seconds < 60) return 2;
+  else if (seconds < 120) return 5;
+
+  return 10;
+}
 
 const ServerApplicationContainer = styled.div`
   min-width: 15rem;
