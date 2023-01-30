@@ -39,8 +39,8 @@ const StartPage = () => {
         } else {
           setDialogText("Unknown error");
         }
-      } catch {
-        setDialogText("An error occured when fetching the status");
+      } catch (e) {
+        setDialogText("An error occured when fetching the status: " + e);
       }
       setFetchingStatus(false);
       console.log("not fetching anymore");

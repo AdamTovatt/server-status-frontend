@@ -36,12 +36,12 @@ export async function GetIsServer() {
 
 export function GetBasePath() {
   let requestPath = "https://sakurapi.se/auto-builder";
+  if (GetIsServer()) requestPath = "http://192.168.1.89/auto-builder";
   if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
     //use local address if development
     //requestPath = "https://localhost:5001";
-    requestPath = "https://192.168.1.89/auto-builder";
+    requestPath = "http://192.168.1.89/auto-builder";
   }
-  if (GetIsServer()) requestPath = "https://192.168.1.89/auto-builder";
 
   return requestPath;
 }
