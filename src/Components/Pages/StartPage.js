@@ -112,9 +112,9 @@ const StartPage = () => {
 };
 
 const ServerApplicationContainer = styled.div`
-  min-width: 30rem;
+  min-width: 15rem;
   width: 60rem;
-  max-width: 80vw;
+  max-width: 95vw;
 `;
 
 const Loader = () => {
@@ -128,30 +128,10 @@ const Loader = () => {
   );
 };
 
-const LoaderPanel = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${Color.DarkLighter};
-  max-width: 80vw;
-  width: 30rem;
-  border-radius: ${BorderRadius.Default};
-  padding: 2rem;
-
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-`;
-
 const Page = styled.div`
   background-color: ${Color.Dark};
   width: 100vw;
   height: 100vh;
-`;
-
-const UserPanelTitle = styled.div`
-  margin-bottom: 0.4rem;
-  text-align: center;
-  width: 100%;
 `;
 
 const CenterContainer = styled.div`
@@ -173,30 +153,6 @@ const StatRow = styled.div`
 const StatColumn = styled.div`
   color: ${(props) =>
     props ? (props.color ? props.color : Color.White) : Color.White};
-`;
-
-const UserStatsPanel = styled.div`
-  background-color: ${Color.DarkLighter};
-  max-width: 80vw;
-  width: ${(props) => (props.width ? props.width + "rem" : "30rem")};
-  border-radius: ${BorderRadius.Default};
-  padding: ${(props) => (props.padding ? props.padding + "rem" : "2rem")};
-
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-`;
-
-const RatingChartContainer = styled.div`
-  max-width: 80vw;
-  width: 30rem;
-  background-color: ${Color.DarkLighter};
-  padding: 2rem;
-  padding-right: 2.2.rem;
-  padding-bottom: 1rem;
-  border-radius: ${BorderRadius.Default};
-
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
 `;
 
 export default StartPage;
