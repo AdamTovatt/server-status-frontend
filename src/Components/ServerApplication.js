@@ -3,8 +3,15 @@ import { GetTimeSinceDate } from "../Functions";
 import { BorderRadius, Color } from "./Constants";
 import VerticalSpacing from "./VerticalSpacing";
 import ThinButton from "./ThinButton";
+import { StartBuild } from "../Api";
 
-const ServerApplication = ({ serverApplication, open, onClick }) => {
+const ServerApplication = ({
+  apiKey,
+  serverApplication,
+  open,
+  onClick,
+  didRequestRebuild,
+}) => {
   return (
     <ApplicationBackground>
       {open ? (
@@ -25,7 +32,14 @@ const ServerApplication = ({ serverApplication, open, onClick }) => {
           <VerticalSpacing height={1} />
           <Columns>
             <Title>Start rebuild:</Title>
-            <ThinButton Color={Color.Purple} TextColor={Color.Dark}>
+            <ThinButton
+              onClick={async () => {
+                await StartBuild(apiKey, serverApplication.name);
+                if (didRequestRebuild) didRequestRebuild();
+              }}
+              Color={Color.Purple}
+              TextColor={Color.Dark}
+            >
               Rebuild
             </ThinButton>
           </Columns>

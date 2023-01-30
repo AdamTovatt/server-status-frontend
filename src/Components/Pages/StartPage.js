@@ -18,6 +18,7 @@ const StartPage = () => {
   const [statusData, setStatusData] = useState(null);
   const [hasFetched, setHasFetched] = useState(false);
   const [openName, setOpenName] = useState(null);
+  const [apiKey, setApiKey] = useState(null);
 
   const cookies = new Cookies();
 
@@ -32,38 +33,34 @@ const StartPage = () => {
       } else if (response.status == 400) {
         setDialogText("Invalid api key");
         setCookie("apiKey", null);
+        setApiKey(null);
       } else {
         setDialogText("Unknown error");
       }
       setFetchingStatus(false);
     }
 
-    if (
-      cookies.get("apiKey") &&
-      !statusData &&
-      !fetchingStatus &&
-      !hasFetched
-    ) {
+    if (cookies.get("apiKey") && !fetchingStatus && !hasFetched) {
       FetchStatusData();
       setHasFetched(true);
+      setApiKey(cookies.get("apiKey"));
     }
 
     const interval = setInterval(() => {
       setCounter(counter + 1);
 
-      if (counter !== 0 && counter % 60 === 0) {
+      if (counter !== 0 && counter % 5 === 0) {
+        setHasFetched(false);
         //FetchStatusData();
       }
       if (counter !== 0 && counter % 300 === 0) {
-        //FetchRatingInfo();
-        //FetchMatches();
         setCounter(0);
       }
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [fetchingStatus, counter]);
+  }, [fetchingStatus, counter, hasFetched, statusData]);
 
   return (
     <Page>
@@ -81,6 +78,10 @@ const StartPage = () => {
             {statusData.applications.map((data, index) => (
               <div key={index}>
                 <ServerApplication
+                  didRequestRebuild={() => {
+                    setHasFetched(false);
+                  }}
+                  apiKey={apiKey}
                   serverApplication={data}
                   open={data.name === openName}
                   onClick={() => {
