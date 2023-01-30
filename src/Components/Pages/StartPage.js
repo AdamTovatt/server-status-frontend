@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { BorderRadius, Color } from "../Constants";
 import { useState, useEffect } from "react";
-import { GetStatus } from "../../Api";
+import { GetIsServer, GetStatus } from "../../Api";
 import RatingChart from "../RatingChart";
 import DialogBox from "../DialogBox";
 import { BarLoader } from "react-spinners";
@@ -26,19 +26,24 @@ const StartPage = () => {
   useEffect(() => {
     async function FetchStatusData() {
       setFetchingStatus(true);
-      let response = await GetStatus(cookies.get("apiKey"));
-      if (response.status === 200) {
-        let json = await response.json();
-        console.log(json);
-        setStatusData(json);
-      } else if (response.status == 400) {
-        setDialogText("Invalid api key");
-        setCookie("apiKey", null);
-        setApiKey(null);
-      } else {
-        setDialogText("Unknown error");
+      try {
+        let response = await GetStatus(cookies.get("apiKey"));
+        if (response.status === 200) {
+          let json = await response.json();
+          console.log(json);
+          setStatusData(json);
+        } else if (response.status === 400) {
+          setDialogText("Invalid api key");
+          setCookie("apiKey", null);
+          setApiKey(null);
+        } else {
+          setDialogText("Unknown error");
+        }
+      } catch {
+        setDialogText("An error occured when fetching the status");
       }
       setFetchingStatus(false);
+      console.log("not fetching anymore");
     }
 
     if (cookies.get("apiKey") && !fetchingStatus && !hasFetched) {
