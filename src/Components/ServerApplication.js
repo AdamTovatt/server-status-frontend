@@ -5,10 +5,10 @@ import ThinButton from "./ThinButton";
 
 const ServerApplication = ({ serverApplication, open, onClick }) => {
   return (
-    <ApplicationBackground onClick={() => onClick()}>
+    <ApplicationBackground>
       {open ? (
         <Row>
-          <Columns>
+          <Columns style={{ cursor: "pointer" }} onClick={() => onClick()}>
             <Title>{serverApplication.name}</Title>
             <Title>^</Title>
           </Columns>
@@ -28,7 +28,7 @@ const ServerApplication = ({ serverApplication, open, onClick }) => {
         </Row>
       ) : (
         <Row>
-          <Columns>
+          <Columns style={{ cursor: "pointer" }} onClick={() => onClick()}>
             <Title>{serverApplication.name}</Title>
             <Title>V</Title>
           </Columns>
@@ -76,7 +76,6 @@ const ApplicationBackground = styled.div`
   min-height: 5rem;
   border-radius: ${BorderRadius.Default};
   display: flex;
-  cursor: pointer;
   -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
 `;

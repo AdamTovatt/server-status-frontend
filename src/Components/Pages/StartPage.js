@@ -84,7 +84,8 @@ const StartPage = () => {
                   serverApplication={data}
                   open={data.name === openName}
                   onClick={() => {
-                    setOpenName(data.name);
+                    if (openName == data.name) setOpenName(null);
+                    else setOpenName(data.name);
                   }}
                 />
                 <VerticalSpacing height={1} />
