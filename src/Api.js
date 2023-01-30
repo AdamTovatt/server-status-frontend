@@ -18,7 +18,7 @@ export async function StartBuild(apiKey, applicationName) {
 }
 
 export function GetBasePath() {
-  let requestPath = "https://ledigasalar.online/auto-builder";
+  let requestPath = "https://sakurapi.se/auto-builder";
   if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
     //use local address if development
     //requestPath = "https://localhost:5001";
