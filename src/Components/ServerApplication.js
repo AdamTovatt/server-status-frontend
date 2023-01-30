@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { GetTimeSinceDate } from "../Functions";
 import { BorderRadius, Color } from "./Constants";
+import VerticalSpacing from "./VerticalSpacing";
 import ThinButton from "./ThinButton";
 
 const ServerApplication = ({ serverApplication, open, onClick }) => {
@@ -12,13 +13,16 @@ const ServerApplication = ({ serverApplication, open, onClick }) => {
             <Title>{serverApplication.name}</Title>
             <Title>^</Title>
           </Columns>
+          <VerticalSpacing height={1} />
           <Columns>
             <Title>Last build time:</Title>
             <Title>{GetTimeSinceDate(serverApplication.lastBuildTime)}</Title>
           </Columns>
+          <VerticalSpacing height={1} />
           <Columns>
             <ConsoleBackground>{serverApplication.buildLog}</ConsoleBackground>
           </Columns>
+          <VerticalSpacing height={1} />
           <Columns>
             <Title>Start rebuild:</Title>
             <ThinButton Color={Color.Purple} TextColor={Color.Dark}>
@@ -51,14 +55,15 @@ const ConsoleBackground = styled.div`
 `;
 
 const Columns = styled.div`
-  width: 100%;
+  width: calc(100% - 3rem);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
 
 const Row = styled.div`
-  margin: 2rem;
+  justify-content: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -66,18 +71,19 @@ const Row = styled.div`
 
 const Title = styled.div`
   font-size: 1.2rem;
-  margin-bottom: 1rem;
 `;
 
 const ApplicationBackground = styled.div`
   background-color: ${Color.DarkLighter};
   font-family: "Jost";
   width: 100%;
-  min-height: 5rem;
+  min-height: 3rem;
   border-radius: ${BorderRadius.Default};
   display: flex;
   -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 `;
 
 export default ServerApplication;
