@@ -84,6 +84,9 @@ const StartPage = () => {
         )}
         {statusData ? (
           <ServerApplicationContainer>
+            <ConsoleBackground>
+              <ConsoleText>{statusData.cpuUsage}</ConsoleText>
+            </ConsoleBackground>
             {statusData.applications.map((data, index) => (
               <div key={index}>
                 <ServerApplication
@@ -133,6 +136,26 @@ function GetUpdateFrequency(lastRebuildTime) {
 
   return 10;
 }
+
+const ConsoleBackground = styled.div`
+  background-color: ${Color.DarkLightest};
+  border-radius: 12px;
+  width: 100%;
+  white-space: pre-line;
+  font-family: "Roboto";
+  font-size: 0.9rem;
+  cursor: text;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+const ConsoleText = styled.div`
+  width: calc(100% - 2rem);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+`;
 
 const ServerApplicationContainer = styled.div`
   min-width: 15rem;
