@@ -85,7 +85,10 @@ const StartPage = () => {
         {statusData ? (
           <ServerApplicationContainer>
             <ConsoleBackground>
-              <ConsoleText>{statusData.cpuUsage}</ConsoleText>
+              <ConsoleText>
+                {statusData.temperature}
+                {statusData.cpuUsage}
+              </ConsoleText>
             </ConsoleBackground>
             {statusData.applications.map((data, index) => (
               <div key={index}>
