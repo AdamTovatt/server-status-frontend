@@ -17,17 +17,29 @@ const ServerApplication = ({
       {open ? (
         <Row>
           <Columns style={{ cursor: "pointer" }} onClick={() => onClick()}>
-            <Title>{serverApplication.name}</Title>
+            <LeftAlignedHeader>
+              <Title>
+                <StatusHeader
+                  status={serverApplication.status}
+                  subStatus={serverApplication.subStatus}
+                />
+              </Title>
+              <Title>{serverApplication.configuration.name}</Title>
+            </LeftAlignedHeader>
             <Title>^</Title>
           </Columns>
           <VerticalSpacing height={1} />
           <Columns>
             <Title>Last build time:</Title>
-            <Title>{GetTimeSinceDate(serverApplication.lastBuildTime)}</Title>
+            <Title>
+              {GetTimeSinceDate(serverApplication.configuration.lastBuildTime)}
+            </Title>
           </Columns>
           <VerticalSpacing height={1} />
           <Columns>
-            <ConsoleBackground>{serverApplication.buildLog}</ConsoleBackground>
+            <ConsoleBackground>
+              {serverApplication.configuration.buildLog}
+            </ConsoleBackground>
           </Columns>
           <VerticalSpacing height={1} />
           <Columns>
@@ -47,7 +59,15 @@ const ServerApplication = ({
       ) : (
         <Row>
           <Columns style={{ cursor: "pointer" }} onClick={() => onClick()}>
-            <Title>{serverApplication.name}</Title>
+            <LeftAlignedHeader>
+              <Title>
+                <StatusHeader
+                  status={serverApplication.status}
+                  subStatus={serverApplication.subStatus}
+                />
+              </Title>
+              <Title>{serverApplication.configuration.name}</Title>
+            </LeftAlignedHeader>
             <Title>V</Title>
           </Columns>
         </Row>
@@ -55,6 +75,40 @@ const ServerApplication = ({
     </ApplicationBackground>
   );
 };
+
+const LeftAlignedHeader = styled.div`
+  display: flex;
+  align-items: left;
+`;
+
+const StatusHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-right: 1rem;
+`;
+
+const StatusHeader = ({ status, subStatus }) => {
+  let statusColor = status
+    ? status === "active"
+      ? Color.Green
+      : Color.Yellow
+    : Color.Red;
+  let subStatusColor = subStatus
+    ? status === "active"
+      ? Color.Green
+      : Color.Yellow
+    : Color.Red;
+  return (
+    <StatusHeaderContainer>
+      <StatusHeaderText color={statusColor}>o</StatusHeaderText>
+      <StatusHeaderText color={subStatusColor}>o</StatusHeaderText>
+    </StatusHeaderContainer>
+  );
+};
+
+const StatusHeaderText = styled.div`
+  color: ${(props) => props.color};
+`;
 
 const ConsoleBackground = styled.div`
   background-color: ${Color.DarkLightest};
@@ -91,7 +145,7 @@ const ApplicationBackground = styled.div`
   background-color: ${Color.DarkLighter};
   font-family: "Jost";
   width: 100%;
-  min-height: 3rem;
+  min-height: 1.5rem;
   border-radius: ${BorderRadius.Default};
   display: flex;
   -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);

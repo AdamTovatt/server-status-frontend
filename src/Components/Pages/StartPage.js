@@ -69,7 +69,14 @@ const StartPage = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [fetchingStatus, counter, hasFetched, statusData]);
+  }, [
+    fetchingStatus,
+    counter,
+    hasFetched,
+    statusData,
+    lastRebuildTime,
+    cookies,
+  ]);
 
   return (
     <Page>
@@ -86,8 +93,11 @@ const StartPage = () => {
           <ServerApplicationContainer>
             <ConsoleBackground>
               <ConsoleText>
-                {statusData.temperature}
-                {statusData.cpuUsage}
+                {"temperature: " +
+                  statusData.temperature.temperature +
+                  "C\nCpu: " +
+                  statusData.topCommand.totalCpuUsage +
+                  "%"}
               </ConsoleText>
             </ConsoleBackground>
             {statusData.applications.map((data, index) => (
@@ -99,13 +109,13 @@ const StartPage = () => {
                   }}
                   apiKey={apiKey}
                   serverApplication={data}
-                  open={data.name === openName}
+                  open={data.configuration.name === openName}
                   onClick={() => {
-                    if (openName == data.name) setOpenName(null);
-                    else setOpenName(data.name);
+                    if (openName === data.configuration.name) setOpenName(null);
+                    else setOpenName(data.configuration.name);
                   }}
                 />
-                <VerticalSpacing height={1} />
+                <VerticalSpacing height={0.5} />
               </div>
             ))}
           </ServerApplicationContainer>

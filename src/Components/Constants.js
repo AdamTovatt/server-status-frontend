@@ -8,6 +8,7 @@ export const Color = {
   Purple: "#9777c7",
   White: "#eeeeee",
   Green: "#81c784",
+  Yellow: "#e3ca76",
 };
 
 export const BorderRadius = {
