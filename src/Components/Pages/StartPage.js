@@ -96,7 +96,7 @@ const StartPage = () => {
                 {"temperature: " +
                   statusData.temperature.temperature +
                   "C\nCpu: " +
-                  statusData.topCommand.totalCpuUsage +
+                  Math.round(statusData.topCommand.totalCpuUsage * 100) / 100 +
                   "%"}
               </ConsoleText>
             </ConsoleBackground>
