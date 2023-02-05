@@ -190,9 +190,9 @@ const Loader = () => {
   return (
     <BarLoader
       color={Color.Purple}
-      height={17}
+      height={12}
       speedMultiplier={1.2}
-      width={400}
+      width={200}
     />
   );
 };

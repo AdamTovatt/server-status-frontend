@@ -138,6 +138,9 @@ const ConsoleBackground = styled.div`
   font-size: 0.9rem;
   cursor: text;
   margin-bottom: 2rem;
+  overflow: wrap;
+  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
 `;
 
 const Columns = styled.div`
