@@ -68,13 +68,31 @@ const ServerApplication = ({
               </Title>
               <Title>{serverApplication.configuration.name}</Title>
             </LeftAlignedHeader>
-            <Title>V</Title>
+            <RightAlignedHeader>
+              <Title>
+                <DetailsHeaderContainer>
+                  {serverApplication.cpuUsage === -1
+                    ? null
+                    : Math.round(serverApplication.cpuUsage * 10) / 10 + "%"}
+                </DetailsHeaderContainer>
+              </Title>
+              <Title>V</Title>
+            </RightAlignedHeader>
           </Columns>
         </Row>
       )}
     </ApplicationBackground>
   );
 };
+
+const RightAlignedHeader = styled.div`
+  display: flex;
+  align-items: right;
+`;
+
+const DetailsHeaderContainer = styled.div`
+  margin-right: 1rem;
+`;
 
 const LeftAlignedHeader = styled.div`
   display: flex;

@@ -80,7 +80,7 @@ const StartPage = () => {
 
   return (
     <Page>
-      <VerticalSpacing height={2} />
+      <VerticalSpacing height={1} />
       <CenterContainer>
         {!dialogText ? null : (
           <DialogBox
@@ -93,10 +93,20 @@ const StartPage = () => {
           <ServerApplicationContainer>
             <ConsoleBackground>
               <ConsoleText>
-                {"temperature: " +
+                {"time: " +
+                  new Date(Date.parse(statusData.topCommand.time + "+00:00"))
+                    .toString()
+                    .split(" ")[4] +
+                  "\ntemperature: " +
                   statusData.temperature.temperature +
-                  "C\nCpu: " +
+                  "°C\nuptime: " +
+                  statusData.topCommand.uptime +
+                  "\nCpu: " +
                   Math.round(statusData.topCommand.totalCpuUsage * 100) / 100 +
+                  "%" +
+                  "\n15 min load average: " +
+                  Math.round(statusData.topCommand.loadAverage5Minute * 100) /
+                    100 +
                   "%"}
               </ConsoleText>
             </ConsoleBackground>
