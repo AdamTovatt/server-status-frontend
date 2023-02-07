@@ -113,12 +113,24 @@ const StartPage = () => {
                 "%"
               }
             />
+            <VerticalSpacing height={1} />
             {statusData.applications.map((data, index) => (
               <div key={index}>
                 <ServerApplication
-                  didRequestRebuild={() => {
+                  didRequestRebuild={async (response) => {
                     setHasFetched(false);
                     setLastRebuildTime(Date.now());
+                    if (response.status !== 200) {
+                      try {
+                        let parsedJson = await response.json();
+                        setDialogText("Error: " + parsedJson.message);
+                      } catch {
+                        setDialogText(
+                          "Unknown error when starting build, code: " +
+                            response.status
+                        );
+                      }
+                    }
                   }}
                   apiKey={apiKey}
                   serverApplication={data}

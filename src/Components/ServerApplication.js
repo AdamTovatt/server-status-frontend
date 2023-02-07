@@ -40,6 +40,10 @@ const ServerApplication = ({
             <Title>Substatus:</Title>
             <Title>{serverApplication.subStatus}</Title>
           </Columns>
+          <VerticalSpacing height={0.6} />
+          <Columns>
+            <Console title={"Application log"} />
+          </Columns>
           <VerticalSpacing height={1} />
           <Columns>
             <Title>Last build time:</Title>
@@ -54,13 +58,16 @@ const ServerApplication = ({
               title={"Build log"}
             />
           </Columns>
-          <VerticalSpacing height={0.5} />
+          <VerticalSpacing height={1} />
           <Columns>
             <Title>Start rebuild:</Title>
             <ThinButton
               onClick={async () => {
-                await StartBuild(apiKey, serverApplication.name);
-                if (didRequestRebuild) didRequestRebuild();
+                let response = await StartBuild(
+                  apiKey,
+                  serverApplication.configuration.name
+                );
+                if (didRequestRebuild) didRequestRebuild(response);
               }}
               Color={Color.Purple}
               TextColor={Color.Depth1}

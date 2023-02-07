@@ -4,6 +4,19 @@ export async function GetStatus(apiKey) {
   });
 }
 
+export async function GetLog(apiKey, applicationName) {
+  return await fetch(
+    GetBasePath() +
+      "/status?applicationName=" +
+      applicationName +
+      "&apiKey=" +
+      apiKey,
+    {
+      method: "GET",
+    }
+  );
+}
+
 export async function StartBuild(apiKey, applicationName) {
   return await fetch(
     GetBasePath() +
