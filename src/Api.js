@@ -7,7 +7,7 @@ export async function GetStatus(apiKey) {
 export async function GetLog(apiKey, applicationName) {
   return await fetch(
     GetBasePath() +
-      "/status?applicationName=" +
+      "/log?applicationName=" +
       applicationName +
       "&apiKey=" +
       apiKey,

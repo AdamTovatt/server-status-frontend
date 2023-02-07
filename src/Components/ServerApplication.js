@@ -3,9 +3,10 @@ import { GetTimeSinceDate } from "../Functions";
 import { BorderRadius, Color } from "./Constants";
 import VerticalSpacing from "./VerticalSpacing";
 import ThinButton from "./ThinButton";
-import { StartBuild } from "../Api";
+import { GetLog, StartBuild } from "../Api";
 import Console from "./Console";
 import { keyframes } from "styled-components";
+import { useState } from "react";
 
 const ServerApplication = ({
   apiKey,
@@ -14,6 +15,8 @@ const ServerApplication = ({
   onClick,
   didRequestRebuild,
 }) => {
+  const [applicationLog, setApplicationLog] = useState(null);
+
   return (
     <ApplicationBackground>
       {open ? (
@@ -42,7 +45,25 @@ const ServerApplication = ({
           </Columns>
           <VerticalSpacing height={0.6} />
           <Columns>
-            <Console title={"Application log"} />
+            <Console
+              title={"Application log"}
+              text={applicationLog}
+              wasOpened={async () => {
+                let response = await GetLog(
+                  apiKey,
+                  serverApplication.configuration.name
+                );
+
+                if (response.status === 200) {
+                  setApplicationLog((await response.json()).log);
+                } else {
+                  setApplicationLog(
+                    "Error when getting application log, error code: " +
+                      response.status
+                  );
+                }
+              }}
+            />
           </Columns>
           <VerticalSpacing height={1} />
           <Columns>
