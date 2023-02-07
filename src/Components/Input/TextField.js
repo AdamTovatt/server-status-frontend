@@ -45,7 +45,7 @@ const TextField = ({
             height={"2rem"}
             width={"3rem"}
             style={{
-              color: Color.DarkLighter,
+              color: Color.Depth2,
             }}
           ></SendIcon>
         </SubmitButton>
@@ -63,7 +63,7 @@ const ButtonAndFieldContainer = styled.div`
 const SubmitButton = styled.button`
   width: 5rem;
   background-color: ${Color.Purple};
-  border: 0.3rem solid ${Color.DarkLighter};
+  border: 0.3rem solid ${Color.Depth2};
   border-radius: 0 ${BorderRadius.Default} ${BorderRadius.Default} 0;
   cursor: pointer;
 

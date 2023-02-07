@@ -10,6 +10,7 @@ import ServerApplication from "../ServerApplication";
 import VerticalSpacing from "../VerticalSpacing";
 import { GetTimeSinceDate, setCookie } from "../../Functions";
 import Cookies from "universal-cookie";
+import Console from "../Console";
 
 const StartPage = () => {
   const [dialogText, setDialogText] = useState(null);
@@ -91,25 +92,27 @@ const StartPage = () => {
         )}
         {statusData ? (
           <ServerApplicationContainer>
-            <ConsoleBackground>
-              <ConsoleText>
-                {"time: " +
-                  new Date(Date.parse(statusData.topCommand.time + "+00:00"))
-                    .toString()
-                    .split(" ")[4] +
-                  "\ntemperature: " +
-                  statusData.temperature.temperature +
-                  "°C\nuptime: " +
-                  statusData.topCommand.uptime +
-                  "\nCpu: " +
-                  Math.round(statusData.topCommand.totalCpuUsage * 100) / 100 +
-                  "%" +
-                  "\n15 min load average: " +
-                  Math.round(statusData.topCommand.loadAverage5Minute * 100) /
-                    100 +
-                  "%"}
-              </ConsoleText>
-            </ConsoleBackground>
+            <Console
+              defaultOpen={true}
+              title={"System information"}
+              text={
+                "time: " +
+                new Date(Date.parse(statusData.topCommand.time + "+00:00"))
+                  .toString()
+                  .split(" ")[4] +
+                "\ntemperature: " +
+                statusData.temperature.temperature +
+                "°C\nuptime: " +
+                statusData.topCommand.uptime +
+                "\nCpu: " +
+                Math.round(statusData.topCommand.totalCpuUsage * 100) / 100 +
+                "%" +
+                "\n15 min load average: " +
+                Math.round(statusData.topCommand.loadAverage5Minute * 100) /
+                  100 +
+                "%"
+              }
+            />
             {statusData.applications.map((data, index) => (
               <div key={index}>
                 <ServerApplication
@@ -138,7 +141,7 @@ const StartPage = () => {
               setHasFetched(false);
               setCookie("apiKey", text);
             }}
-            color={Color.DarkLighter}
+            color={Color.Depth2}
             placeHolder={"Enter api key..."}
             title={"Api key"}
           ></TextField>
@@ -160,26 +163,6 @@ function GetUpdateFrequency(lastRebuildTime) {
   return 10;
 }
 
-const ConsoleBackground = styled.div`
-  background-color: ${Color.DarkLightest};
-  border-radius: 12px;
-  width: 100%;
-  white-space: pre-line;
-  font-family: "Roboto";
-  font-size: 0.9rem;
-  cursor: text;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
-`;
-
-const ConsoleText = styled.div`
-  width: calc(100% - 2rem);
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-`;
-
 const ServerApplicationContainer = styled.div`
   min-width: 15rem;
   width: 60rem;
@@ -198,7 +181,7 @@ const Loader = () => {
 };
 
 const Page = styled.div`
-  background-color: ${Color.Dark};
+  background-color: ${Color.Depth1};
   width: 100vw;
   height: 100vh;
 `;

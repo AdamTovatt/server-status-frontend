@@ -4,6 +4,8 @@ import { BorderRadius, Color } from "./Constants";
 import VerticalSpacing from "./VerticalSpacing";
 import ThinButton from "./ThinButton";
 import { StartBuild } from "../Api";
+import Console from "./Console";
+import { keyframes } from "styled-components";
 
 const ServerApplication = ({
   apiKey,
@@ -30,6 +32,16 @@ const ServerApplication = ({
           </Columns>
           <VerticalSpacing height={1} />
           <Columns>
+            <Title>Status:</Title>
+            <Title>{serverApplication.status}</Title>
+          </Columns>
+          <VerticalSpacing height={0.5} />
+          <Columns>
+            <Title>Substatus:</Title>
+            <Title>{serverApplication.subStatus}</Title>
+          </Columns>
+          <VerticalSpacing height={1} />
+          <Columns>
             <Title>Last build time:</Title>
             <Title>
               {GetTimeSinceDate(serverApplication.configuration.lastBuildTime)}
@@ -37,11 +49,12 @@ const ServerApplication = ({
           </Columns>
           <VerticalSpacing height={1} />
           <Columns>
-            <ConsoleBackground>
-              {serverApplication.configuration.buildLog}
-            </ConsoleBackground>
+            <Console
+              text={serverApplication.configuration.buildLog}
+              title={"Build log"}
+            />
           </Columns>
-          <VerticalSpacing height={1} />
+          <VerticalSpacing height={0.5} />
           <Columns>
             <Title>Start rebuild:</Title>
             <ThinButton
@@ -50,7 +63,7 @@ const ServerApplication = ({
                 if (didRequestRebuild) didRequestRebuild();
               }}
               Color={Color.Purple}
-              TextColor={Color.Dark}
+              TextColor={Color.Depth1}
             >
               Rebuild
             </ThinButton>
@@ -124,23 +137,27 @@ const StatusHeader = ({ status, subStatus }) => {
   );
 };
 
-const StatusHeaderText = styled.div`
-  color: ${(props) => props.color};
+const scaleOnShow = keyframes`
+  0%
+  {
+    transform: scale( 1, 0.1 );
+  }
+  60%
+  {
+    transform: scale( 1, 1.1 );
+  }
+  95%
+  {
+    transform: scale(1, 0.98);
+  }
+  100%
+  {
+    transform: scale(1, 1);
+  }
 `;
 
-const ConsoleBackground = styled.div`
-  background-color: ${Color.DarkLightest};
-  padding: 1rem;
-  border-radius: 12px;
-  width: 100%;
-  white-space: pre-line;
-  font-family: "Roboto";
-  font-size: 0.9rem;
-  cursor: text;
-  margin-bottom: 2rem;
-  overflow: hidden;
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+const StatusHeaderText = styled.div`
+  color: ${(props) => props.color};
 `;
 
 const Columns = styled.div`
@@ -160,19 +177,21 @@ const Row = styled.div`
 
 const Title = styled.div`
   font-size: 1.2rem;
+  user-select: none;
 `;
 
 const ApplicationBackground = styled.div`
-  background-color: ${Color.DarkLighter};
+  background-color: ${Color.Depth2};
   font-family: "Jost";
   width: 100%;
   min-height: 1.5rem;
   border-radius: ${BorderRadius.Default};
   display: flex;
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+  animation: ${scaleOnShow} 0.2s ease forwards;
 `;
 
 export default ServerApplication;

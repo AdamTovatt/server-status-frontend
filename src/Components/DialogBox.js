@@ -20,7 +20,7 @@ const DialogBox = ({ text, setDialogText, onClose }) => {
           <ThinButton
             Width={"10rem"}
             Color={Color.Green}
-            TextColor={Color.Dark}
+            TextColor={Color.Depth1}
           >
             ok
           </ThinButton>

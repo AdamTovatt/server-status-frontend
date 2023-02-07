@@ -1,7 +1,8 @@
 export const Color = {
-  Dark: "#23232a",
-  DarkLighter: "#2a2a32",
-  DarkLightest: "#31313B",
+  Depth1: "#23232a",
+  Depth2: "#2a2a32",
+  Depth3: "#31313B",
+  Depth4: "#3c3c48",
   DarkBlue: "#0f0e1b",
   Red: "#e8695f",
   Wine: "#ede4da",
