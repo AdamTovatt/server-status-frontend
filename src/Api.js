@@ -1,12 +1,12 @@
 export async function GetStatus(apiKey) {
-  return await fetch(GetBasePath() + "/status?apiKey=" + apiKey, {
+  return await fetch((await GetBasePath()) + "/status?apiKey=" + apiKey, {
     method: "GET",
   });
 }
 
 export async function GetLog(apiKey, applicationName) {
   return await fetch(
-    GetBasePath() +
+    (await GetBasePath()) +
       "/log?applicationName=" +
       applicationName +
       "&apiKey=" +
@@ -19,7 +19,7 @@ export async function GetLog(apiKey, applicationName) {
 
 export async function StartBuild(apiKey, applicationName) {
   return await fetch(
-    GetBasePath() +
+    (await GetBasePath()) +
       "/start?apiKey=" +
       apiKey +
       "&applicationName=" +
@@ -43,17 +43,17 @@ export async function GetIsServer() {
     currentIp = result.ip;
   }
 
-  if (serverIp === currentIp) return true;
-  return false;
+  return currentIp === serverIp;
 }
 
-export function GetBasePath() {
+export async function GetBasePath() {
   let requestPath = "https://sakurapi.se/auto-builder";
-  //if (GetIsServer()) requestPath = "http://192.168.1.89/auto-builder";
+  let isServer = await GetIsServer();
+  if (isServer) requestPath = "http://192.168.1.89/auto-builder";
   if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
     //use local address if development
     //requestPath = "https://localhost:5001";
-    requestPath = "http://192.168.1.89/auto-builder";
+    //requestPath = "http://192.168.1.89/auto-builder";
   }
 
   return requestPath;
