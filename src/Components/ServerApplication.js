@@ -7,6 +7,7 @@ import { GetLog, StartBuild } from "../Api";
 import Console from "./Console";
 import { keyframes } from "styled-components";
 import { useState } from "react";
+import { ChevronDown, ChevronUp, Circle } from "react-feather";
 
 const ServerApplication = ({
   apiKey,
@@ -31,7 +32,11 @@ const ServerApplication = ({
               </Title>
               <Title>{serverApplication.configuration.name}</Title>
             </LeftAlignedHeader>
-            <Title>^</Title>
+            <Title>
+              <ChevronContainer negative={true}>
+                <ChevronUp />
+              </ChevronContainer>
+            </Title>
           </Columns>
           <VerticalSpacing height={1} />
           <Columns>
@@ -117,7 +122,11 @@ const ServerApplication = ({
                     : Math.round(serverApplication.cpuUsage * 10) / 10 + "%"}
                 </DetailsHeaderContainer>
               </Title>
-              <Title>V</Title>
+              <Title>
+                <ChevronContainer>
+                  <ChevronDown />
+                </ChevronContainer>
+              </Title>
             </RightAlignedHeader>
           </Columns>
         </Row>
@@ -143,6 +152,7 @@ const LeftAlignedHeader = styled.div`
 const StatusHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   margin-right: 1rem;
 `;
 
@@ -159,8 +169,9 @@ const StatusHeader = ({ status, subStatus }) => {
     : Color.Red;
   return (
     <StatusHeaderContainer>
-      <StatusHeaderText color={statusColor}>o</StatusHeaderText>
-      <StatusHeaderText color={subStatusColor}>o</StatusHeaderText>
+      <StatusHeaderText color={statusColor}>
+        <Circle fill={subStatusColor} />
+      </StatusHeaderText>
     </StatusHeaderContainer>
   );
 };
@@ -184,8 +195,48 @@ const scaleOnShow = keyframes`
   }
 `;
 
+const turnAround = keyframes`
+ 0%
+ {
+  transform: rotate(180deg);
+ }
+ 100%
+ {
+  transform: rotate(0deg);
+ }
+`;
+
+const turnAroundNegative = keyframes`
+ 0%
+ {
+  transform: rotate(-180deg);
+ }
+ 100%
+ {
+  transform: rotate(0deg);
+ }
+`;
+
+const ChevronContainer = styled.div`
+  animation: ${(props) => (props.negative ? turnAroundNegative : turnAround)}
+    0.2s ease forwards;
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+    transition-duration: 0.05s;
+  }
+`;
+
 const StatusHeaderText = styled.div`
   color: ${(props) => props.color};
+  display: flex;
+  align-items: center;
 `;
 
 const Columns = styled.div`
@@ -206,6 +257,8 @@ const Row = styled.div`
 const Title = styled.div`
   font-size: 1.2rem;
   user-select: none;
+  display: flex;
+  align-items: center;
 `;
 
 const ApplicationBackground = styled.div`
