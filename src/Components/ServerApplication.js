@@ -8,6 +8,7 @@ import Console from "./Console";
 import { keyframes } from "styled-components";
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Circle } from "react-feather";
+import { maxHeight } from "@mui/system";
 
 const ServerApplication = ({
   apiKey,
@@ -170,7 +171,7 @@ const StatusHeader = ({ status, subStatus }) => {
   return (
     <StatusHeaderContainer>
       <StatusHeaderText color={statusColor}>
-        <Circle fill={subStatusColor} />
+        <Circle width={"1rem"} fill={subStatusColor} />
       </StatusHeaderText>
     </StatusHeaderContainer>
   );
@@ -237,10 +238,11 @@ const StatusHeaderText = styled.div`
   color: ${(props) => props.color};
   display: flex;
   align-items: center;
+  max-height: 0.5rem;
 `;
 
 const Columns = styled.div`
-  width: calc(100% - 3rem);
+  width: calc(100% - 2rem);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -270,8 +272,8 @@ const ApplicationBackground = styled.div`
   display: flex;
   -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   animation: ${scaleOnShow} 0.2s ease forwards;
 `;
 
