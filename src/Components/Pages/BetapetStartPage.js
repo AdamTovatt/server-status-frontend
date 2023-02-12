@@ -13,6 +13,7 @@ import TextField from "../Input/TextField";
 import MatchSummary from "../MatchSummary";
 import VerticalSpacing from "../VerticalSpacing";
 import { GetTimeSinceDate } from "../../Functions";
+import { keyframes } from "styled-components";
 import TabButtons from "../Input/TabButtons";
 
 const BetapetStartPage = () => {
@@ -266,6 +267,25 @@ const BetapetStartPage = () => {
   );
 };
 
+const scaleOnShow = keyframes`
+  0%
+  {
+    transform: scale( 1, 0.1 );
+  }
+  60%
+  {
+    transform: scale( 1, 1.1 );
+  }
+  95%
+  {
+    transform: scale(1, 0.98);
+  }
+  100%
+  {
+    transform: scale(1, 1);
+  }
+`;
+
 async function GetApiResponseOnChat(message, setMessage) {
   let result = await GetChatResponse(message);
 
@@ -340,8 +360,10 @@ const UserStatsPanel = styled.div`
   border-radius: ${BorderRadius.Default};
   padding: ${(props) => (props.padding ? props.padding + "rem" : "2rem")};
 
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+
+  animation: ${scaleOnShow} 0.2s ease forwards;
 `;
 
 const TabButtonsContainer = styled.div`
@@ -360,8 +382,10 @@ const RatingChartContainer = styled.div`
   padding-bottom: 1rem;
   border-radius: ${BorderRadius.Default};
 
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+
+  animation: ${scaleOnShow} 0.2s ease forwards;
 `;
 
 export default BetapetStartPage;
