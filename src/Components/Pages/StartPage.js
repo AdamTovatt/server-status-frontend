@@ -11,6 +11,7 @@ import VerticalSpacing from "../VerticalSpacing";
 import { GetTimeSinceDate, setCookie } from "../../Functions";
 import Cookies from "universal-cookie";
 import Console from "../Console";
+import TabButtons from "../Input/TabButtons";
 
 const StartPage = () => {
   const [dialogText, setDialogText] = useState(null);
@@ -83,6 +84,16 @@ const StartPage = () => {
     <Page>
       <VerticalSpacing height={1} />
       <CenterContainer>
+        <ServerApplicationContainer>
+          <TabButtons
+            buttons={[
+              { path: "/", icon: "home" },
+              { path: "/betapet", icon: "betapet" },
+            ]}
+            currentButtonIndex={0}
+          />
+        </ServerApplicationContainer>
+        <VerticalSpacing height={1} />
         {!dialogText ? null : (
           <DialogBox
             text={dialogText}

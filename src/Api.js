@@ -30,6 +30,33 @@ export async function StartBuild(apiKey, applicationName) {
   );
 }
 
+export async function GetRating() {
+  return await fetch((await GetBasePath(true)) + "/bot/rating", {
+    method: "GET",
+  });
+}
+
+export async function GetBetapetStatus() {
+  return await fetch((await GetBasePath(true)) + "/bot/status", {
+    method: "GET",
+  });
+}
+
+export async function GetMatches() {
+  return await fetch((await GetBasePath(true)) + "/bot/gameSummaries", {
+    method: "GET",
+  });
+}
+
+export async function GetChatResponse(message) {
+  return await fetch(
+    (await GetBasePath(true)) + "/bot/getChatResponse?message=" + message,
+    {
+      method: "GET",
+    }
+  );
+}
+
 const serverIp = "92.34.13.93";
 let currentIp = null;
 
@@ -46,10 +73,18 @@ export async function GetIsServer() {
   return currentIp === serverIp;
 }
 
-export async function GetBasePath() {
-  let requestPath = "https://sakurapi.se/auto-builder";
+export async function GetBasePath(betapet) {
+  let requestPath = betapet
+    ? "https://sakurapi.se/betapet-bot-api"
+    : "https://sakurapi.se/auto-builder";
+
   let isServer = await GetIsServer();
-  if (isServer) requestPath = "http://192.168.1.89/auto-builder";
+  if (isServer) {
+    requestPath = betapet
+      ? "http://192.168.1.89/betapet-bot-api"
+      : "http://192.168.1.89/auto-builder";
+  }
+
   if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
     //use local address if development
     //requestPath = "https://localhost:5001";
