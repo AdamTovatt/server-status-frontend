@@ -100,7 +100,7 @@ const BetapetStartPage = () => {
           <TabButtons
             buttons={[
               { path: "/", icon: "home" },
-              { path: "/", icon: "betapet" },
+              { path: "/betapet", icon: "betapet" },
             ]}
             currentButtonIndex={1}
           />
