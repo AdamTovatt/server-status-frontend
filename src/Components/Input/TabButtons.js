@@ -7,9 +7,8 @@ const TabButtons = ({ buttons, currentButtonIndex }) => {
     <ButtonsContainer>
       {buttons.map((button, index) => {
         return (
-          <Link style={{ flex: 1 }} to={button.path}>
+          <Link key={index} style={{ flex: 1 }} to={button.path}>
             <TabButton
-              key={index}
               borderRadius={getBorderRadius(
                 index === 0 ? -1 : index === buttons.length - 1 ? 1 : 0
               )}

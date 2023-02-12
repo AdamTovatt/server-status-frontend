@@ -249,11 +249,11 @@ const BetapetStartPage = () => {
         <UserPanelTitle>Matches</UserPanelTitle>
         {matches ? (
           <UserStatsPanel padding={2}>
-            {matches.map((match) => (
-              <>
+            {matches.map((match, index) => (
+              <div key={index}>
                 <MatchSummary match={match} />
                 <VerticalSpacing height={0.8} />
-              </>
+              </div>
             ))}
           </UserStatsPanel>
         ) : (
