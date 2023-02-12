@@ -122,6 +122,11 @@ const BetapetStartPage = () => {
         {status ? (
           <UserStatsPanel>
             <StatRow>
+              <StatColumn>Currently thinking:</StatColumn>
+              <StatColumn>{status.handlingThings.toString()}</StatColumn>
+            </StatRow>
+            <VerticalSpacing height={0.4} />
+            <StatRow>
               <StatColumn>Last play time:</StatColumn>
               <StatColumn>{GetTimeSinceDate(status.lastPlayTime)}</StatColumn>
             </StatRow>
