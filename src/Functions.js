@@ -1,5 +1,14 @@
 import Cookies from "universal-cookie";
 
+export function GetFormattedMinutesValue(value) {
+  if (value == -1) return "-1";
+
+  let hours = Math.floor(value / 60);
+  let leftOverMinutes = Math.round(value - hours * 60);
+
+  return hours + "h " + leftOverMinutes + "min";
+}
+
 export function GetTimeSinceDate(time) {
   let seconds = (Date.now() - new Date(time)) / 1000;
   let minutes = seconds / 60;

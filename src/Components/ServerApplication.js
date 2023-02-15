@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GetTimeSinceDate } from "../Functions";
+import { GetFormattedMinutesValue, GetTimeSinceDate } from "../Functions";
 import { BorderRadius, Color } from "./Constants";
 import VerticalSpacing from "./VerticalSpacing";
 import ThinButton from "./ThinButton";
@@ -48,6 +48,16 @@ const ServerApplication = ({
           <Columns>
             <Title>Substatus:</Title>
             <Title>{serverApplication.subStatus}</Title>
+          </Columns>
+          <VerticalSpacing height={0.5} />
+          <Columns>
+            <Title>Cpu time:</Title>
+            <Title>{GetFormattedMinutesValue(serverApplication.cpuTime)}</Title>
+          </Columns>
+          <VerticalSpacing height={0.5} />
+          <Columns>
+            <Title>Memory usage:</Title>
+            <Title>{serverApplication.memoryUsage}</Title>
           </Columns>
           <VerticalSpacing height={0.6} />
           <Columns>
