@@ -27,7 +27,6 @@ const StartPage = () => {
   const { width } = useViewport();
 
   const isMobile = width < BreakPoints.Mobile;
-  console.log(isMobile);
   const cookies = new Cookies();
 
   useEffect(() => {

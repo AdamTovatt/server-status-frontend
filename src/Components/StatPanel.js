@@ -21,6 +21,7 @@ const StatPanelBackground = styled.div`
   padding-bottom: 1rem;
   display: flex;
   flex-direction: row;
+  height: 100%;
 
   -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
@@ -30,6 +31,7 @@ const StatPanelBackground = styled.div`
 
 const StatRowContainer = styled.div`
   width: 100%;
+  height: 100%;
 `;
 
 export default StatPanel;

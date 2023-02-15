@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BorderRadius, Color } from "../Constants";
+import { BorderRadius, BreakPoints, Color } from "../Constants";
 import { useState, useEffect } from "react";
 import {
   GetRating,
@@ -11,13 +11,14 @@ import RatingChart from "../RatingChart";
 import TextField from "../Input/TextField";
 import MatchSummary from "../MatchSummary";
 import VerticalSpacing from "../VerticalSpacing";
-import { GetTimeSinceDate } from "../../Functions";
+import { GetTimeSinceDate, useViewport } from "../../Functions";
 import { keyframes } from "styled-components";
 import TabButtons from "../Input/TabButtons";
 import Loader from "../Loader";
 import HorizontalSpacing from "../HorizontalSpacing";
 import StatRow from "../StatRow";
 import StatPanel from "../StatPanel";
+import Header from "../Header";
 
 const BetapetStartPage = () => {
   const [shouldFetchRatingInfo, setShouldFetchRatingInfo] = useState(true);
@@ -30,6 +31,9 @@ const BetapetStartPage = () => {
 
   const [counter, setCounter] = useState(0);
   const [botChatAnswer, setBotChatAnswer] = useState(null);
+
+  const { width } = useViewport();
+  const isMobile = width < BreakPoints.Mobile;
 
   useEffect(() => {
     async function FetchRatingInfo() {
@@ -97,120 +101,74 @@ const BetapetStartPage = () => {
 
   return (
     <Page>
+      {isMobile ? null : (
+        <Header
+          buttons={[
+            { path: "/", icon: "home" },
+            { path: "/betapet", icon: "betapet" },
+          ]}
+          currentButtonIndex={1}
+        />
+      )}
       <VerticalSpacing height={0.6} />
       <CenterContainer>
-        <TabButtonsContainer>
-          <TabButtons
-            buttons={[
-              { path: "/", icon: "home" },
-              { path: "/betapet", icon: "betapet" },
-            ]}
-            currentButtonIndex={1}
-          />
-        </TabButtonsContainer>
+        {isMobile ? (
+          <TabButtonsContainer>
+            <TabButtons
+              buttons={[
+                { path: "/", icon: "home" },
+                { path: "/betapet", icon: "betapet" },
+              ]}
+              currentButtonIndex={1}
+            />
+          </TabButtonsContainer>
+        ) : null}
         <VerticalSpacing height={1} />
-        {ratingInfo ? (
-          <PanelContainer>
-            <RatingChart data={ratingInfo} height={"20rem"}></RatingChart>
-          </PanelContainer>
+        {isMobile ? (
+          <MobilePageContainer>
+            {!ratingInfo ? (
+              <Loader />
+            ) : (
+              <RatingChart data={ratingInfo} height={"20rem"}></RatingChart>
+            )}
+          </MobilePageContainer>
         ) : (
-          <PanelContainer>
-            <Loader />
-          </PanelContainer>
+          <DesktopPageContainer>
+            <HorizontalSpacing />
+            {!ratingInfo ? (
+              <Loader />
+            ) : (
+              <RatingChart data={ratingInfo} height={"20rem"}></RatingChart>
+            )}
+            <HorizontalSpacing />
+            <>
+              <FirstStatusPanel status={status} />
+            </>
+            <HorizontalSpacing />
+          </DesktopPageContainer>
         )}
         <VerticalSpacing height={1} />
-
-        {status ? (
-          <PanelContainer>
-            <StatPanel>
-              <StatRow
-                leftText={"Currently thinking:"}
-                rightText={status.handlingThings.toString()}
-              />
-              <StatRow
-                leftText={"Last play time:"}
-                rightText={GetTimeSinceDate(status.lastPlayTime)}
-              />
-              <StatRow leftText={"Current rating:"} rightText={status.rating} />
-              <StatRow
-                leftText={"Projected rating change:"}
-                rightText={
-                  status.projectedRatingChange > 0
-                    ? "+" + status.projectedRatingChange
-                    : status.projectedRatingChange
-                }
-                rightColor={
-                  status.projectedRatingChange > 0 ? Color.Green : Color.Red
-                }
-              />
-              <StatRow
-                leftText={"Leading:"}
-                rightText={
-                  Math.round((100 * status.leading) / status.activeMatches) +
-                  "%"
-                }
-                rightColor={
-                  status.leading > status.activeMatches / 2
-                    ? Color.Green
-                    : Color.Red
-                }
-              />
-              <StatRow
-                leftText={"Leading (rating corrected):"}
-                rightText={
-                  Math.round(
-                    (100 * status.leadingRatingCorrected) / status.activeMatches
-                  ) + "%"
-                }
-                rightColor={
-                  status.leadingRatingCorrected > status.activeMatches / 2
-                    ? Color.Green
-                    : Color.Red
-                }
-              />
-            </StatPanel>
-          </PanelContainer>
+        {isMobile ? (
+          <>
+            <MobilePageContainer>
+              <FirstStatusPanel status={status} />
+            </MobilePageContainer>
+            <VerticalSpacing height={1} />
+            <MobilePageContainer>
+              <SecondStatusPanel status={status} />
+            </MobilePageContainer>
+          </>
         ) : (
-          <PanelContainer>
-            <Loader />
-          </PanelContainer>
+          <DesktopPageContainer>
+            <HorizontalSpacing />
+            <FirstStatusPanel status={status} />
+            <HorizontalSpacing />
+            <SecondStatusPanel status={status} />
+            <HorizontalSpacing />
+          </DesktopPageContainer>
         )}
         <VerticalSpacing height={1} />
-        {status ? (
-          <PanelContainer>
-            <StatPanel>
-              <StatRow
-                leftText={"Active matches:"}
-                rightText={status.activeMatches}
-              />
-              <StatRow
-                leftText={"Opponents waiting for us:"}
-                rightText={status.opponentsWaitingForUs}
-              />
-              <StatRow leftText={"Matches won:"} rightText={status.won} />
-              <StatRow leftText={"Matches lost:"} rightText={status.lost} />
-              <StatRow
-                leftText={"Total matches:"}
-                rightText={status.won + status.lost}
-              />
-              <StatRow leftText={"Bingos:"} rightText={status.bingos} />
-              <StatRow
-                leftText={"Average time per move:"}
-                rightText={
-                  status.averageTimePerMove
-                    ? status.averageTimePerMove / 1000 + " s"
-                    : "?"
-                }
-              />
-            </StatPanel>
-          </PanelContainer>
-        ) : (
-          <PanelContainer>
-            <Loader />
-          </PanelContainer>
-        )}
-        <VerticalSpacing height={1} />
-        <PanelContainer>
+        <MobilePageContainer>
           <TextField
             onSumbit={(text) => {
               GetApiResponseOnChat(text, setBotChatAnswer);
@@ -219,33 +177,35 @@ const BetapetStartPage = () => {
             placeHolder={"Write a message to test the response..."}
             title={"Test the chat function"}
           ></TextField>
-        </PanelContainer>
+        </MobilePageContainer>
         <VerticalSpacing height={1} />
         {botChatAnswer ? (
-          <PanelContainer>
+          <MobilePageContainer>
             <StatPanel>
               <StatRow leftText={botChatAnswer} />
             </StatPanel>
             <VerticalSpacing height={1} />
-          </PanelContainer>
+          </MobilePageContainer>
         ) : null}
         <VerticalSpacing height={1} />
         <UserPanelTitle>Matches</UserPanelTitle>
         {matches ? (
-          <PanelContainer>
+          <MobilePageContainer>
             <StatPanel padding={1}>
-              {matches.map((match, index) => (
-                <div key={index}>
-                  <MatchSummary match={match} />
-                  <VerticalSpacing height={0.8} />
-                </div>
-              ))}
+              <MatchesContainer>
+                {matches.map((match, index) => (
+                  <div key={index}>
+                    <MatchSummary match={match} />
+                    <VerticalSpacing height={0.8} />
+                  </div>
+                ))}
+              </MatchesContainer>
             </StatPanel>
-          </PanelContainer>
+          </MobilePageContainer>
         ) : (
-          <PanelContainer>
+          <MobilePageContainer>
             <Loader />
-          </PanelContainer>
+          </MobilePageContainer>
         )}
         <VerticalSpacing height={2} />
       </CenterContainer>
@@ -261,6 +221,101 @@ async function GetApiResponseOnChat(message, setMessage) {
     setMessage(json.message);
   }
 }
+
+const FirstStatusPanel = ({ status }) => {
+  return (
+    <>
+      {status ? (
+        <StatPanel>
+          <StatRow
+            leftText={"Currently thinking:"}
+            rightText={status.handlingThings.toString()}
+          />
+          <StatRow
+            leftText={"Last play time:"}
+            rightText={GetTimeSinceDate(status.lastPlayTime)}
+          />
+          <StatRow leftText={"Current rating:"} rightText={status.rating} />
+          <StatRow
+            leftText={"Projected rating change:"}
+            rightText={
+              status.projectedRatingChange > 0
+                ? "+" + status.projectedRatingChange
+                : status.projectedRatingChange
+            }
+            rightColor={
+              status.projectedRatingChange > 0 ? Color.Green : Color.Red
+            }
+          />
+          <StatRow
+            leftText={"Leading:"}
+            rightText={
+              Math.round((100 * status.leading) / status.activeMatches) + "%"
+            }
+            rightColor={
+              status.leading > status.activeMatches / 2
+                ? Color.Green
+                : Color.Red
+            }
+          />
+          <StatRow
+            leftText={"Leading (rating corrected):"}
+            rightText={
+              Math.round(
+                (100 * status.leadingRatingCorrected) / status.activeMatches
+              ) + "%"
+            }
+            rightColor={
+              status.leadingRatingCorrected > status.activeMatches / 2
+                ? Color.Green
+                : Color.Red
+            }
+          />
+        </StatPanel>
+      ) : (
+        <Loader />
+      )}
+    </>
+  );
+};
+
+const SecondStatusPanel = ({ status }) => {
+  return (
+    <>
+      {status ? (
+        <StatPanel>
+          <StatRow
+            leftText={"Active matches:"}
+            rightText={status.activeMatches}
+          />
+          <StatRow
+            leftText={"Opponents waiting for us:"}
+            rightText={status.opponentsWaitingForUs}
+          />
+          <StatRow leftText={"Matches won:"} rightText={status.won} />
+          <StatRow leftText={"Matches lost:"} rightText={status.lost} />
+          <StatRow
+            leftText={"Total matches:"}
+            rightText={status.won + status.lost}
+          />
+          <StatRow leftText={"Bingos:"} rightText={status.bingos} />
+          <StatRow
+            leftText={"Average time per move:"}
+            rightText={
+              status.averageTimePerMove
+                ? status.averageTimePerMove / 1000 + " s"
+                : "?"
+            }
+          />
+        </StatPanel>
+      ) : (
+        <Loader />
+      )}
+    </>
+  );
+};
+
+const MatchesContainer = styled.div``;
 
 const Page = styled.div`
   background-color: ${Color.Depth1};
@@ -285,10 +340,17 @@ const CenterContainer = styled.div`
   font-size: 1.2rem;
 `;
 
-const PanelContainer = styled.div`
+const MobilePageContainer = styled.div`
   min-width: 15rem;
   width: 60rem;
   max-width: 95vw;
+`;
+
+const DesktopPageContainer = styled.div`
+  min-width: 15rem;
+  width: 100%;
+  display: flex;
+  justify-content: left;
 `;
 
 const TabButtonsContainer = styled.div`

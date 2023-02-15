@@ -69,10 +69,7 @@ const ScorePillBackground = styled.div`
 
 const OurScore = styled.div`
   text-align: center;
-  min-height: 2rem;
-  @media (max-width: 540px) {
-    min-height: 1rem;
-  }
+  min-height: 1rem;
   background-color: ${Color.Green};
   width: ${(props) => props.width + "rem"};
   border-radius: ${BorderRadius.Default}
@@ -86,10 +83,7 @@ const OurScore = styled.div`
 
 const TheirScore = styled.div`
   text-align: center;
-  min-height: 2rem;
-  @media (max-width: 540px) {
-    min-height: 1rem;
-  }
+  min-height: 1rem;
   background-color: ${Color.Red};
   width: ${(props) => props.width + "rem"};
   border-radius: ${(props) => (props.bothRound ? BorderRadius.Default : 0)}
@@ -114,6 +108,7 @@ const SummaryContent = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  font-size: 1rem;
 
   @media (max-width: 540px) {
     font-size: 0.8rem;
