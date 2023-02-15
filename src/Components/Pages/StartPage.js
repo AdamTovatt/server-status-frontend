@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BorderRadius, Color } from "../Constants";
+import { BorderRadius, BreakPoints, Color } from "../Constants";
 import { useState, useEffect } from "react";
 import { GetIsServer, GetStatus } from "../../Api";
 import RatingChart from "../RatingChart";
@@ -8,10 +8,12 @@ import { BarLoader } from "react-spinners";
 import TextField from "../Input/TextField";
 import ServerApplication from "../ServerApplication";
 import VerticalSpacing from "../VerticalSpacing";
-import { GetTimeSinceDate, setCookie } from "../../Functions";
+import HorizontalSpacing from "../HorizontalSpacing";
+import { GetTimeSinceDate, setCookie, useViewport } from "../../Functions";
 import Cookies from "universal-cookie";
 import Console from "../Console";
 import TabButtons from "../Input/TabButtons";
+import Header from "../Header";
 
 const StartPage = () => {
   const [dialogText, setDialogText] = useState(null);
@@ -22,7 +24,10 @@ const StartPage = () => {
   const [openName, setOpenName] = useState(null);
   const [apiKey, setApiKey] = useState(null);
   const [lastRebuildTime, setLastRebuildTime] = useState(null);
+  const { width } = useViewport();
 
+  const isMobile = width < BreakPoints.Mobile;
+  console.log(isMobile);
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -78,21 +83,33 @@ const StartPage = () => {
     statusData,
     lastRebuildTime,
     cookies,
+    width,
   ]);
 
   return (
     <Page>
+      {isMobile ? null : (
+        <Header
+          buttons={[
+            { path: "/", icon: "home" },
+            { path: "/betapet", icon: "betapet" },
+          ]}
+          currentButtonIndex={0}
+        />
+      )}
       <VerticalSpacing height={1} />
       <CenterContainer>
-        <ServerApplicationContainer>
-          <TabButtons
-            buttons={[
-              { path: "/", icon: "home" },
-              { path: "/betapet", icon: "betapet" },
-            ]}
-            currentButtonIndex={0}
-          />
-        </ServerApplicationContainer>
+        {isMobile ? (
+          <MobileStartPageContainer>
+            <TabButtons
+              buttons={[
+                { path: "/", icon: "home" },
+                { path: "/betapet", icon: "betapet" },
+              ]}
+              currentButtonIndex={0}
+            />
+          </MobileStartPageContainer>
+        ) : null}
         <VerticalSpacing height={1} />
         {!dialogText ? null : (
           <DialogBox
@@ -102,59 +119,38 @@ const StartPage = () => {
           />
         )}
         {statusData ? (
-          <ServerApplicationContainer>
-            <Console
-              defaultOpen={true}
-              title={"System information"}
-              text={
-                "time: " +
-                new Date(Date.parse(statusData.topCommand.time + "+00:00"))
-                  .toString()
-                  .split(" ")[4] +
-                "\ntemperature: " +
-                statusData.temperature.temperature +
-                "°C\nuptime: " +
-                statusData.topCommand.uptime +
-                "\nCpu: " +
-                Math.round(statusData.topCommand.totalCpuUsage * 100) / 100 +
-                "%" +
-                "\n15 min load average: " +
-                Math.round(statusData.topCommand.loadAverage5Minute * 100) /
-                  100 +
-                "%"
-              }
-            />
-            <VerticalSpacing height={1} />
-            {statusData.applications.map((data, index) => (
-              <div key={index}>
-                <ServerApplication
-                  didRequestRebuild={async (response) => {
-                    setHasFetched(false);
-                    setLastRebuildTime(Date.now());
-                    if (response.status !== 200) {
-                      try {
-                        let parsedJson = await response.json();
-                        setDialogText("Error: " + parsedJson.message);
-                      } catch {
-                        setDialogText(
-                          "Unknown error when starting build, code: " +
-                            response.status
-                        );
-                      }
-                    }
-                  }}
-                  apiKey={apiKey}
-                  serverApplication={data}
-                  open={data.configuration.name === openName}
-                  onClick={() => {
-                    if (openName === data.configuration.name) setOpenName(null);
-                    else setOpenName(data.configuration.name);
-                  }}
-                />
-                <VerticalSpacing height={0.5} />
-              </div>
-            ))}
-          </ServerApplicationContainer>
+          isMobile ? (
+            <MobileStartPageContainer>
+              <ConsoleWithInformation statusData={statusData} />
+              <VerticalSpacing height={1} />
+              <ServerApplications
+                statusData={statusData}
+                setHasFetched={setHasFetched}
+                setLastRebuildTime={setLastRebuildTime}
+                setDialogText={setDialogText}
+                apiKey={apiKey}
+                openName={openName}
+                setOpenName={setOpenName}
+              />
+              <VerticalSpacing height={1} />
+            </MobileStartPageContainer>
+          ) : (
+            <DesktopStartPageContainer>
+              <HorizontalSpacing />
+              <ServerApplications
+                statusData={statusData}
+                setHasFetched={setHasFetched}
+                setLastRebuildTime={setLastRebuildTime}
+                setDialogText={setDialogText}
+                apiKey={apiKey}
+                openName={openName}
+                setOpenName={setOpenName}
+              />
+              <HorizontalSpacing />
+              <ConsoleWithInformation statusData={statusData} />
+              <HorizontalSpacing />
+            </DesktopStartPageContainer>
+          )
         ) : fetchingStatus ? (
           <Loader />
         ) : (
@@ -174,6 +170,75 @@ const StartPage = () => {
   );
 };
 
+const ConsoleWithInformation = ({ statusData }) => {
+  return (
+    <Console
+      defaultOpen={true}
+      title={"System information"}
+      text={
+        "time: " +
+        new Date(Date.parse(statusData.topCommand.time + "+00:00"))
+          .toString()
+          .split(" ")[4] +
+        "\ntemperature: " +
+        statusData.temperature.temperature +
+        "°C\nuptime: " +
+        statusData.topCommand.uptime +
+        "\nCpu: " +
+        Math.round(statusData.topCommand.totalCpuUsage * 100) / 100 +
+        "%" +
+        "\n15 min load average: " +
+        Math.round(statusData.topCommand.loadAverage5Minute * 100) / 100 +
+        "%"
+      }
+    />
+  );
+};
+
+const ServerApplications = ({
+  statusData,
+  setHasFetched,
+  setLastRebuildTime,
+  setDialogText,
+  apiKey,
+  openName,
+  setOpenName,
+}) => {
+  return (
+    <ServerApplicationContainer>
+      {statusData.applications.map((data, index) => (
+        <div key={index}>
+          <ServerApplication
+            didRequestRebuild={async (response) => {
+              setHasFetched(false);
+              setLastRebuildTime(Date.now());
+              if (response.status !== 200) {
+                try {
+                  let parsedJson = await response.json();
+                  setDialogText("Error: " + parsedJson.message);
+                } catch {
+                  setDialogText(
+                    "Unknown error when starting build, code: " +
+                      response.status
+                  );
+                }
+              }
+            }}
+            apiKey={apiKey}
+            serverApplication={data}
+            open={data.configuration.name === openName}
+            onClick={() => {
+              if (openName === data.configuration.name) setOpenName(null);
+              else setOpenName(data.configuration.name);
+            }}
+          />
+          <VerticalSpacing height={0.5} />
+        </div>
+      ))}
+    </ServerApplicationContainer>
+  );
+};
+
 function GetUpdateFrequency(lastRebuildTime) {
   if (!lastRebuildTime) return 10; //default frequency
 
@@ -187,9 +252,20 @@ function GetUpdateFrequency(lastRebuildTime) {
 }
 
 const ServerApplicationContainer = styled.div`
+  width: 100%;
+`;
+
+const MobileStartPageContainer = styled.div`
   min-width: 15rem;
   width: 60rem;
   max-width: 95vw;
+`;
+
+const DesktopStartPageContainer = styled.div`
+  min-width: 15rem;
+  width: 100%;
+  display: flex;
+  justify-content: left;
 `;
 
 const Loader = () => {

@@ -64,6 +64,7 @@ const ConsoleBackground = styled.div`
   background-color: ${Color.Depth3};
   border-radius: 12px;
   width: 100%;
+  height: 100%;
   white-space: pre-line;
   font-family: "Roboto";
   font-size: 0.9rem;

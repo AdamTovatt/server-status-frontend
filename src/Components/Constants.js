@@ -15,3 +15,7 @@ export const Color = {
 export const BorderRadius = {
   Default: "16px",
 };
+
+export const BreakPoints = {
+  Mobile: 800,
+};

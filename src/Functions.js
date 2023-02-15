@@ -1,3 +1,4 @@
+import React from "react";
 import Cookies from "universal-cookie";
 
 export function GetFormattedMinutesValue(value) {
@@ -36,3 +37,15 @@ export function setCookie(cookieName, cookieValue) {
     secure: true,
   });
 }
+
+export const useViewport = () => {
+  const [width, setWidth] = React.useState(window.innerWidth);
+
+  React.useEffect(() => {
+    const handleWindowResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, []);
+
+  return { width };
+};
