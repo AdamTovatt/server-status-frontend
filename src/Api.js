@@ -57,7 +57,7 @@ export async function GetChatResponse(message) {
   );
 }
 
-const serverIp = "92.34.13.93";
+const serverIp = "92.34.6.221";
 let currentIp = null;
 
 export async function GetIsServer() {
