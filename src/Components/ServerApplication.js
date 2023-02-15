@@ -62,6 +62,7 @@ const ServerApplication = ({
           <VerticalSpacing height={0.6} />
           <Columns>
             <Console
+              color={Color.Depth3}
               title={"Application log"}
               text={applicationLog}
               wasOpened={async () => {
@@ -91,6 +92,7 @@ const ServerApplication = ({
           <VerticalSpacing height={1} />
           <Columns>
             <Console
+              color={Color.Depth3}
               text={serverApplication.configuration.buildLog}
               title={"Build log"}
             />

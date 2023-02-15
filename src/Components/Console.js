@@ -3,14 +3,15 @@ import { BorderRadius, Color } from "./Constants";
 import { useState } from "react";
 import { keyframes } from "styled-components";
 
-const Console = ({ text, title, defaultOpen, wasOpened }) => {
+const Console = ({ text, title, defaultOpen, wasOpened, color }) => {
   const [open, setOpen] = useState(defaultOpen);
   const [keyCounter, setKeyCounter] = useState(1);
 
   return (
-    <ConsoleBackground open={open} key={keyCounter}>
+    <ConsoleBackground color={color} open={open} key={keyCounter}>
       {title ? (
         <ConsoleTitle
+          color={color}
           open={open}
           onClick={() => {
             setOpen(!open);
@@ -50,7 +51,7 @@ const ConsoleTitleText = styled.div`
 `;
 
 const ConsoleTitle = styled.div`
-  background-color: ${Color.Depth3};
+  background-color: ${(props) => (props.color ? props.color : Color.Depth3)};
   width: 100%;
   border-radius: ${(props) =>
     props.open ? "12px 12px 0px 0px" : "12px 12px 12px 12px"};
@@ -61,7 +62,7 @@ const ConsoleTitle = styled.div`
 `;
 
 const ConsoleBackground = styled.div`
-  background-color: ${Color.Depth3};
+  background-color: ${(props) => (props.color ? props.color : Color.Depth3)};
   border-radius: 12px;
   width: 100%;
   height: 100%;

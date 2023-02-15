@@ -373,7 +373,7 @@ const UserStatsPanel = styled.div`
 
 const TabButtonsContainer = styled.div`
   background-color: ${Color.Depth2};
-  max-width: 80vw;
+  max-width: 95vw;
   width: ${(props) => (props.width ? props.width + "rem" : "34rem")};
   border-radius: ${BorderRadius.Default};
 `;

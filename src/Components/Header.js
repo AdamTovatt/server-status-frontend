@@ -24,7 +24,7 @@ const Header = ({ buttons, currentButtonIndex }) => {
 
 const ButtonsContainer = styled.div`
   width: 100%;
-  background-color: ${Color.Depth2};
+  background-color: ${Color.Depth3};
   display: flex;
   justify-content: left;
   align-items: left;
@@ -36,7 +36,7 @@ const ButtonsContainer = styled.div`
 `;
 
 const TabButton = styled.button`
-  background-color: ${(props) => (props.active ? Color.Depth3 : Color.Depth2)};
+  background-color: ${(props) => (props.active ? Color.Depth4 : Color.Depth3)};
   border: none;
   font-family: "Jost";
   color: ${Color.White};
@@ -49,6 +49,10 @@ const TabButton = styled.button`
 
   box-shadow: 0px 0px 4px 0px
     rgba(0, 0, 0, ${(props) => (props.active ? 0.2 : 0)});
+
+  &:hover {
+    background-color: ${Color.Depth2};
+  }
 `;
 
 export default Header;
