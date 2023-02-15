@@ -15,7 +15,7 @@ const TextField = ({
   const [text, setText] = useState(null);
 
   return (
-    <TextFieldContainer Width={width}>
+    <TextFieldContainer>
       <TextAreaTitle>{title}</TextAreaTitle>
       <ButtonAndFieldContainer>
         <CustomTextArea
@@ -56,8 +56,7 @@ const TextField = ({
 
 const ButtonAndFieldContainer = styled.div`
   display: flex;
-  width: 34rem;
-  max-width: 80vw;
+  width: 100%;
 `;
 
 const SubmitButton = styled.button`
@@ -79,6 +78,7 @@ const SubmitButton = styled.button`
 const TextFieldContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const TextAreaTitle = styled.div`

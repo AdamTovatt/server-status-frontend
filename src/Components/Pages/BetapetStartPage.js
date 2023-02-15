@@ -210,14 +210,16 @@ const BetapetStartPage = () => {
           </PanelContainer>
         )}
         <VerticalSpacing height={1} />
-        <TextField
-          onSumbit={(text) => {
-            GetApiResponseOnChat(text, setBotChatAnswer);
-          }}
-          color={Color.Depth2}
-          placeHolder={"Write a message to test the response..."}
-          title={"Test the chat function"}
-        ></TextField>
+        <PanelContainer>
+          <TextField
+            onSumbit={(text) => {
+              GetApiResponseOnChat(text, setBotChatAnswer);
+            }}
+            color={Color.Depth2}
+            placeHolder={"Write a message to test the response..."}
+            title={"Test the chat function"}
+          ></TextField>
+        </PanelContainer>
         <VerticalSpacing height={1} />
         {botChatAnswer ? (
           <PanelContainer>
