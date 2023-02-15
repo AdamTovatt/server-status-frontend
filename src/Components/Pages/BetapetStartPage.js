@@ -8,13 +8,16 @@ import {
   GetMatches,
 } from "../../Api";
 import RatingChart from "../RatingChart";
-import { BarLoader } from "react-spinners";
 import TextField from "../Input/TextField";
 import MatchSummary from "../MatchSummary";
 import VerticalSpacing from "../VerticalSpacing";
 import { GetTimeSinceDate } from "../../Functions";
 import { keyframes } from "styled-components";
 import TabButtons from "../Input/TabButtons";
+import Loader from "../Loader";
+import HorizontalSpacing from "../HorizontalSpacing";
+import StatRow from "../StatRow";
+import StatPanel from "../StatPanel";
 
 const BetapetStartPage = () => {
   const [shouldFetchRatingInfo, setShouldFetchRatingInfo] = useState(true);
@@ -107,128 +110,104 @@ const BetapetStartPage = () => {
         </TabButtonsContainer>
         <VerticalSpacing height={1} />
         {ratingInfo ? (
-          <>
-            <RatingChartContainer>
-              <RatingChart data={ratingInfo} height={"20rem"}></RatingChart>
-            </RatingChartContainer>
-          </>
+          <PanelContainer>
+            <RatingChart data={ratingInfo} height={"20rem"}></RatingChart>
+          </PanelContainer>
         ) : (
-          <LoaderPanel>
+          <PanelContainer>
             <Loader />
-          </LoaderPanel>
+          </PanelContainer>
         )}
         <VerticalSpacing height={1} />
 
         {status ? (
-          <UserStatsPanel>
-            <StatRow>
-              <StatColumn>Currently thinking:</StatColumn>
-              <StatColumn>{status.handlingThings.toString()}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Last play time:</StatColumn>
-              <StatColumn>{GetTimeSinceDate(status.lastPlayTime)}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Current rating:</StatColumn>
-              <StatColumn>{status.rating}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Projected rating change:</StatColumn>
-              <StatColumn
-                color={
+          <PanelContainer>
+            <StatPanel>
+              <StatRow
+                leftText={"Currently thinking:"}
+                rightText={status.handlingThings.toString()}
+              />
+              <StatRow
+                leftText={"Last play time:"}
+                rightText={GetTimeSinceDate(status.lastPlayTime)}
+              />
+              <StatRow leftText={"Current rating:"} rightText={status.rating} />
+              <StatRow
+                leftText={"Projected rating change:"}
+                rightText={
+                  status.projectedRatingChange > 0
+                    ? "+" + status.projectedRatingChange
+                    : status.projectedRatingChange
+                }
+                rightColor={
                   status.projectedRatingChange > 0 ? Color.Green : Color.Red
                 }
-              >
-                {status.projectedRatingChange > 0
-                  ? "+" + status.projectedRatingChange
-                  : status.projectedRatingChange}
-              </StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Leading:</StatColumn>
-              <StatColumn
-                color={
+              />
+              <StatRow
+                leftText={"Leading:"}
+                rightText={
+                  Math.round((100 * status.leading) / status.activeMatches) +
+                  "%"
+                }
+                rightColor={
                   status.leading > status.activeMatches / 2
                     ? Color.Green
                     : Color.Red
                 }
-              >
-                {Math.round((100 * status.leading) / status.activeMatches) +
-                  "%"}
-              </StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Leading (rating corrected):</StatColumn>
-              <StatColumn
-                color={
+              />
+              <StatRow
+                leftText={"Leading (rating corrected):"}
+                rightText={
+                  Math.round(
+                    (100 * status.leadingRatingCorrected) / status.activeMatches
+                  ) + "%"
+                }
+                rightColor={
                   status.leadingRatingCorrected > status.activeMatches / 2
                     ? Color.Green
                     : Color.Red
                 }
-              >
-                {Math.round(
-                  (100 * status.leadingRatingCorrected) / status.activeMatches
-                ) + "%"}
-              </StatColumn>
-            </StatRow>
-          </UserStatsPanel>
+              />
+            </StatPanel>
+          </PanelContainer>
         ) : (
-          <LoaderPanel>
+          <PanelContainer>
             <Loader />
-          </LoaderPanel>
+          </PanelContainer>
         )}
         <VerticalSpacing height={1} />
         {status ? (
-          <UserStatsPanel>
-            <StatRow>
-              <StatColumn>Active matches:</StatColumn>
-              <StatColumn>{status.activeMatches}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Opponents waiting for us:</StatColumn>
-              <StatColumn>{status.opponentsWaitingForUs}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Matches won:</StatColumn>
-              <StatColumn>{status.won}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Matches lost:</StatColumn>
-              <StatColumn>{status.lost}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Total matches:</StatColumn>
-              <StatColumn>{status.won + status.lost}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Bingos:</StatColumn>
-              <StatColumn>{status.bingos}</StatColumn>
-            </StatRow>
-            <VerticalSpacing height={0.4} />
-            <StatRow>
-              <StatColumn>Average time per move:</StatColumn>
-              <StatColumn>
-                {status.averageTimePerMove
-                  ? status.averageTimePerMove / 1000 + " s"
-                  : "?"}
-              </StatColumn>
-            </StatRow>
-          </UserStatsPanel>
+          <PanelContainer>
+            <StatPanel>
+              <StatRow
+                leftText={"Active matches:"}
+                rightText={status.activeMatches}
+              />
+              <StatRow
+                leftText={"Opponents waiting for us:"}
+                rightText={status.opponentsWaitingForUs}
+              />
+              <StatRow leftText={"Matches won:"} rightText={status.won} />
+              <StatRow leftText={"Matches lost:"} rightText={status.lost} />
+              <StatRow
+                leftText={"Total matches:"}
+                rightText={status.won + status.lost}
+              />
+              <StatRow leftText={"Bingos:"} rightText={status.bingos} />
+              <StatRow
+                leftText={"Average time per move:"}
+                rightText={
+                  status.averageTimePerMove
+                    ? status.averageTimePerMove / 1000 + " s"
+                    : "?"
+                }
+              />
+            </StatPanel>
+          </PanelContainer>
         ) : (
-          <LoaderPanel>
+          <PanelContainer>
             <Loader />
-          </LoaderPanel>
+          </PanelContainer>
         )}
         <VerticalSpacing height={1} />
         <TextField
@@ -241,55 +220,36 @@ const BetapetStartPage = () => {
         ></TextField>
         <VerticalSpacing height={1} />
         {botChatAnswer ? (
-          <>
-            <UserStatsPanel>
-              <StatRow>
-                <StatColumn>{botChatAnswer}</StatColumn>
-              </StatRow>
-            </UserStatsPanel>
+          <PanelContainer>
+            <StatPanel>
+              <StatRow leftText={botChatAnswer} />
+            </StatPanel>
             <VerticalSpacing height={1} />
-          </>
+          </PanelContainer>
         ) : null}
         <VerticalSpacing height={1} />
         <UserPanelTitle>Matches</UserPanelTitle>
         {matches ? (
-          <UserStatsPanel padding={2}>
-            {matches.map((match, index) => (
-              <div key={index}>
-                <MatchSummary match={match} />
-                <VerticalSpacing height={0.8} />
-              </div>
-            ))}
-          </UserStatsPanel>
+          <PanelContainer>
+            <StatPanel padding={1}>
+              {matches.map((match, index) => (
+                <div key={index}>
+                  <MatchSummary match={match} />
+                  <VerticalSpacing height={0.8} />
+                </div>
+              ))}
+            </StatPanel>
+          </PanelContainer>
         ) : (
-          <LoaderPanel>
+          <PanelContainer>
             <Loader />
-          </LoaderPanel>
+          </PanelContainer>
         )}
         <VerticalSpacing height={2} />
       </CenterContainer>
     </Page>
   );
 };
-
-const scaleOnShow = keyframes`
-  0%
-  {
-    transform: scale( 1, 0.1 );
-  }
-  60%
-  {
-    transform: scale( 1, 1.1 );
-  }
-  95%
-  {
-    transform: scale(1, 0.98);
-  }
-  100%
-  {
-    transform: scale(1, 1);
-  }
-`;
 
 async function GetApiResponseOnChat(message, setMessage) {
   let result = await GetChatResponse(message);
@@ -299,31 +259,6 @@ async function GetApiResponseOnChat(message, setMessage) {
     setMessage(json.message);
   }
 }
-
-const Loader = () => {
-  return (
-    <BarLoader
-      color={Color.Purple}
-      height={17}
-      speedMultiplier={1.2}
-      width={400}
-    />
-  );
-};
-
-const LoaderPanel = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${Color.Depth2};
-  max-width: 80vw;
-  width: 30rem;
-  border-radius: ${BorderRadius.Default};
-  padding: 2rem;
-
-  -webkit-box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.2);
-`;
 
 const Page = styled.div`
   background-color: ${Color.Depth1};
@@ -348,27 +283,10 @@ const CenterContainer = styled.div`
   font-size: 1.2rem;
 `;
 
-const StatRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StatColumn = styled.div`
-  color: ${(props) =>
-    props ? (props.color ? props.color : Color.White) : Color.White};
-`;
-
-const UserStatsPanel = styled.div`
-  background-color: ${Color.Depth2};
-  max-width: 80vw;
-  width: ${(props) => (props.width ? props.width + "rem" : "30rem")};
-  border-radius: ${BorderRadius.Default};
-  padding: ${(props) => (props.padding ? props.padding + "rem" : "2rem")};
-
-  -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
-
-  animation: ${scaleOnShow} 0.2s ease forwards;
+const PanelContainer = styled.div`
+  min-width: 15rem;
+  width: 60rem;
+  max-width: 95vw;
 `;
 
 const TabButtonsContainer = styled.div`
@@ -376,21 +294,6 @@ const TabButtonsContainer = styled.div`
   max-width: 95vw;
   width: ${(props) => (props.width ? props.width + "rem" : "34rem")};
   border-radius: ${BorderRadius.Default};
-`;
-
-const RatingChartContainer = styled.div`
-  max-width: 80vw;
-  width: 30rem;
-  background-color: ${Color.Depth2};
-  padding: 2rem;
-  padding-right: 2.2.rem;
-  padding-bottom: 1rem;
-  border-radius: ${BorderRadius.Default};
-
-  -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
-
-  animation: ${scaleOnShow} 0.2s ease forwards;
 `;
 
 export default BetapetStartPage;

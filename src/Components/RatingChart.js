@@ -9,7 +9,8 @@ import {
   TooltipValue,
   TooltipXAxisValue,
 } from "styled-chart";
-import { Color } from "./Constants";
+import { BorderRadius, Color } from "./Constants";
+import { scaleOnShow } from "../Animations";
 
 // That's how you style the paths for Dogs, Cats, Pets
 // You can also adjust the other <path /> rules, such as stroke-dasharray
@@ -111,20 +112,42 @@ const TOOLTIP = {
 
 const RatingChart = ({ data, height }) => {
   return (
-    <LineChart
-      height={height}
-      flexure={CHART_LINES_FLEXURE}
-      tooltip={TOOLTIP}
-      yAxis={Y_AXIS(
-        Math.max(...data.map((o) => o.rating)) + 100,
-        Math.min(...data.map((o) => o.rating)) - 100
-      )}
-      xAxis={X_AXIS(data.length / 2)}
-      config={CONFIG}
-      data={data}
-      backgroundColor={Color.Red}
-    />
+    <RatingChartBackground>
+      <HorizontalPadding />
+      <LineChart
+        height={height}
+        flexure={CHART_LINES_FLEXURE}
+        tooltip={TOOLTIP}
+        yAxis={Y_AXIS(
+          Math.max(...data.map((o) => o.rating)) + 100,
+          Math.min(...data.map((o) => o.rating)) - 100
+        )}
+        xAxis={X_AXIS(data.length / 2)}
+        config={CONFIG}
+        data={data}
+        backgroundColor={Color.Red}
+      />
+      <HorizontalPadding />
+    </RatingChartBackground>
   );
 };
+
+const RatingChartBackground = styled.div`
+  width: 100%;
+  display: flex;
+  border-radius: ${BorderRadius.Default};
+  background-color: ${Color.Depth2};
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  animation: ${scaleOnShow} 0.2s ease forwards;
+
+  -webkit-box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+`;
+
+const HorizontalPadding = styled.div`
+  min-width: 1rem;
+`;
 
 export default RatingChart;
