@@ -135,15 +135,36 @@ const BetapetStartPage = () => {
         ) : (
           <DesktopPageContainer>
             <HorizontalSpacing />
-            {!ratingInfo ? (
-              <Loader />
-            ) : (
-              <RatingChart data={ratingInfo} height={"20rem"}></RatingChart>
-            )}
-            <HorizontalSpacing />
-            <>
+            <ColumnContaner>
               <FirstStatusPanel status={status} />
-            </>
+              <VerticalSpacing />
+              <SecondStatusPanel status={status} />
+            </ColumnContaner>
+            <HorizontalSpacing />
+            <ColumnContaner>
+              {!ratingInfo ? (
+                <Loader />
+              ) : (
+                <RatingChart data={ratingInfo} height={"20rem"}></RatingChart>
+              )}
+              <VerticalSpacing />
+              <TextField
+                onSumbit={(text) => {
+                  GetApiResponseOnChat(text, setBotChatAnswer);
+                }}
+                color={Color.Depth2}
+                placeHolder={"Write a message to test the response..."}
+                title={"Test the chat function"}
+              ></TextField>
+              {botChatAnswer ? (
+                <>
+                  <VerticalSpacing />
+                  <StatPanel>
+                    <StatRow leftText={botChatAnswer} />
+                  </StatPanel>
+                </>
+              ) : null}
+            </ColumnContaner>
             <HorizontalSpacing />
           </DesktopPageContainer>
         )}
@@ -158,54 +179,60 @@ const BetapetStartPage = () => {
               <SecondStatusPanel status={status} />
             </MobilePageContainer>
           </>
-        ) : (
-          <DesktopPageContainer>
-            <HorizontalSpacing />
-            <FirstStatusPanel status={status} />
-            <HorizontalSpacing />
-            <SecondStatusPanel status={status} />
-            <HorizontalSpacing />
-          </DesktopPageContainer>
-        )}
+        ) : null}
         <VerticalSpacing height={1} />
-        <MobilePageContainer>
-          <TextField
-            onSumbit={(text) => {
-              GetApiResponseOnChat(text, setBotChatAnswer);
-            }}
-            color={Color.Depth2}
-            placeHolder={"Write a message to test the response..."}
-            title={"Test the chat function"}
-          ></TextField>
-        </MobilePageContainer>
-        <VerticalSpacing height={1} />
-        {botChatAnswer ? (
-          <MobilePageContainer>
-            <StatPanel>
-              <StatRow leftText={botChatAnswer} />
-            </StatPanel>
+        {isMobile ? (
+          <>
+            <MobilePageContainer>
+              <TextField
+                onSumbit={(text) => {
+                  GetApiResponseOnChat(text, setBotChatAnswer);
+                }}
+                color={Color.Depth2}
+                placeHolder={"Write a message to test the response..."}
+                title={"Test the chat function"}
+              ></TextField>
+            </MobilePageContainer>
             <VerticalSpacing height={1} />
-          </MobilePageContainer>
+            {botChatAnswer ? (
+              <MobilePageContainer>
+                <StatPanel>
+                  <StatRow leftText={botChatAnswer} />
+                </StatPanel>
+                <VerticalSpacing height={1} />
+              </MobilePageContainer>
+            ) : null}
+          </>
         ) : null}
         <VerticalSpacing height={1} />
         <UserPanelTitle>Matches</UserPanelTitle>
-        {matches ? (
-          <MobilePageContainer>
-            <StatPanel padding={1}>
-              <MatchesContainer>
-                {matches.map((match, index) => (
-                  <div key={index}>
-                    <MatchSummary match={match} />
-                    <VerticalSpacing height={0.8} />
-                  </div>
-                ))}
-              </MatchesContainer>
-            </StatPanel>
-          </MobilePageContainer>
+        {isMobile ? (
+          <>
+            {matches ? (
+              <MobilePageContainer>
+                <StatPanel padding={1}>
+                  <MatchesContainer>
+                    {matches.map((match, index) => (
+                      <div key={index}>
+                        <MatchSummary match={match} />
+                        <VerticalSpacing height={0.8} />
+                      </div>
+                    ))}
+                  </MatchesContainer>
+                </StatPanel>
+              </MobilePageContainer>
+            ) : (
+              <MobilePageContainer>
+                <Loader />
+              </MobilePageContainer>
+            )}
+          </>
         ) : (
-          <MobilePageContainer>
-            <Loader />
-          </MobilePageContainer>
+          <DesktopPageContainer>
+            <HorizontalSpacing />
+            <MatchesGrid matches={matches} />
+            <HorizontalSpacing />
+          </DesktopPageContainer>
         )}
         <VerticalSpacing height={2} />
       </CenterContainer>
@@ -315,6 +342,50 @@ const SecondStatusPanel = ({ status }) => {
   );
 };
 
+const MatchesGrid = ({ matches }) => {
+  return (
+    <>
+      {matches ? (
+        <>
+          <MatchesGridContainer>
+            <HorizontalSpacing />
+            <MatchesGridInnerContainer>
+              {matches.map((match, index) => (
+                <MatchSummary
+                  key={index}
+                  match={match}
+                  ignoreVerticalSpacing={true}
+                />
+              ))}
+            </MatchesGridInnerContainer>
+            <HorizontalSpacing />
+          </MatchesGridContainer>
+        </>
+      ) : (
+        <Loader />
+      )}
+    </>
+  );
+};
+
+const MatchesGridInnerContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  //justify-content: space-evenly;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  gap: 1rem;
+`;
+
+const MatchesGridContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: ${Color.Depth2};
+  border-radius: ${BorderRadius.Default};
+`;
+
 const MatchesContainer = styled.div``;
 
 const Page = styled.div`
@@ -344,6 +415,13 @@ const MobilePageContainer = styled.div`
   min-width: 15rem;
   width: 60rem;
   max-width: 95vw;
+`;
+
+const ColumnContaner = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: top;
 `;
 
 const DesktopPageContainer = styled.div`

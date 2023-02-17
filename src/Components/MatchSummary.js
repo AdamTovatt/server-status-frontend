@@ -4,43 +4,48 @@ import { BorderRadius, Color } from "./Constants";
 import VerticalSpacing from "./VerticalSpacing";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const MatchSummary = ({ match }) => {
+const MatchSummary = ({ match, ignoreVerticalSpacing }) => {
   const matches = useMediaQuery("(min-width:540px)");
 
   return (
-    <SummaryBackground
-      borderColor={match.ratingChange > 0 ? Color.Green : Color.Red}
-      active={match.active}
-    >
-      <SummaryContent>
-        <SummaryColumn>
-          <SummaryRow align={"left"}>
-            {(match.ratingChange > 0 ? "+" : "") + match.ratingChange} rating
-          </SummaryRow>
-          <SummaryRow align={"left"}>{match.completion}% completion</SummaryRow>
-          <VerticalSpacing height={1} />
-          <SummaryRow align={"left"}>
-            <ScorePill
-              width={matches ? 10 : 6}
-              ourScore={match.ourScore}
-              theirScore={match.theirScore}
-            />
-          </SummaryRow>
-        </SummaryColumn>
-        <SummaryColumn>
-          <SummaryRow align={"right"}>
-            {match.ourTurn ? "waiting for us" : "waiting for opponent"}
-          </SummaryRow>
-          <SummaryRow align={"right"}>
-            {match.opponent.name + " (" + match.opponent.rating + ")"}
-          </SummaryRow>
-          <VerticalSpacing height={1} />
-          <SummaryRow align={"right"}>
-            {GetTimeSinceDate(match.lastPlayTime)}
-          </SummaryRow>
-        </SummaryColumn>
-      </SummaryContent>
-    </SummaryBackground>
+    <>
+      <SummaryBackground
+        borderColor={match.ratingChange > 0 ? Color.Green : Color.Red}
+        active={match.active}
+      >
+        <SummaryContent>
+          <SummaryColumn>
+            <SummaryRow align={"left"}>
+              {(match.ratingChange > 0 ? "+" : "") + match.ratingChange} rating
+            </SummaryRow>
+            <SummaryRow align={"left"}>
+              {match.completion}% completion
+            </SummaryRow>
+            <VerticalSpacing height={1} />
+            <SummaryRow align={"left"}>
+              <ScorePill
+                width={matches ? 10 : 6}
+                ourScore={match.ourScore}
+                theirScore={match.theirScore}
+              />
+            </SummaryRow>
+          </SummaryColumn>
+          <SummaryColumn>
+            <SummaryRow align={"right"}>
+              {match.ourTurn ? "waiting for us" : "waiting for opponent"}
+            </SummaryRow>
+            <SummaryRow align={"right"}>
+              {match.opponent.name + " (" + match.opponent.rating + ")"}
+            </SummaryRow>
+            <VerticalSpacing height={1} />
+            <SummaryRow align={"right"}>
+              {GetTimeSinceDate(match.lastPlayTime)}
+            </SummaryRow>
+          </SummaryColumn>
+        </SummaryContent>
+      </SummaryBackground>
+      {ignoreVerticalSpacing ? null : <VerticalSpacing height={0.8} />}
+    </>
   );
 };
 
@@ -120,6 +125,7 @@ const SummaryBackground = styled.div`
   background-color: ${Color.DarkLightest};
   width: auto;
   min-height: 4rem;
+  min-width: 25rem;
   border-radius: ${BorderRadius.Default};
   border: 1px solid ${(props) => props.borderColor};
 
