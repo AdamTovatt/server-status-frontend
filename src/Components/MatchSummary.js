@@ -10,6 +10,7 @@ const MatchSummary = ({ match, ignoreVerticalSpacing }) => {
   return (
     <>
       <SummaryBackground
+        ignoreVerticalSpacing={ignoreVerticalSpacing}
         borderColor={match.ratingChange > 0 ? Color.Green : Color.Red}
         active={match.active}
       >
@@ -125,7 +126,7 @@ const SummaryBackground = styled.div`
   background-color: ${Color.DarkLightest};
   width: auto;
   min-height: 4rem;
-  min-width: 25rem;
+  min-width: ${(props) => (props.ignoreVerticalSpacing ? "25rem" : "0rem")};
   border-radius: ${BorderRadius.Default};
   border: 1px solid ${(props) => props.borderColor};
 
