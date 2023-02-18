@@ -372,7 +372,7 @@ const MatchesGridInnerContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex: 1;
-  //justify-content: space-evenly;
+  justify-content: center;
   padding-top: 2rem;
   padding-bottom: 2rem;
   gap: 1rem;
