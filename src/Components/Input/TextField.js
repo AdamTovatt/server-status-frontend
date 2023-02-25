@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BorderRadius, Color } from "../Constants";
 import { ReactComponent as SendIcon } from "./Assets/send.svg";
@@ -11,6 +11,7 @@ const TextField = ({
   onSumbit,
   width,
   color,
+  clearOnSubmit,
 }) => {
   const [text, setText] = useState(null);
 
@@ -24,6 +25,11 @@ const TextField = ({
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               if (onSumbit) onSumbit(text);
+              console.log("clear: " + clearOnSubmit);
+              if (clearOnSubmit) {
+                setText(null);
+                event.target.value = "";
+              }
             }
           }}
           onChange={(event) => {
@@ -39,6 +45,9 @@ const TextField = ({
           color={color}
           onClick={() => {
             if (onSumbit) onSumbit(text);
+            if (clearOnSubmit) {
+              setText(null);
+            }
           }}
         >
           <SendIcon

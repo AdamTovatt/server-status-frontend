@@ -92,6 +92,7 @@ const StartPage = () => {
           buttons={[
             { path: "/", icon: "home" },
             { path: "/betapet", icon: "betapet" },
+            { path: "/chat", icon: "chat" },
           ]}
           currentButtonIndex={0}
         />

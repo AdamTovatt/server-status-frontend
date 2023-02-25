@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StartPage from "./Components/Pages/StartPage";
 import BetapetStartPage from "./Components/Pages/BetapetStartPage";
+import ChatPage from "./Components/Pages/ChatPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,6 +14,7 @@ root.render(
     <Routes>
       <Route path="/" element={<StartPage />}></Route>
       <Route path="/betapet" element={<BetapetStartPage />}></Route>
+      <Route path="/chat" element={<ChatPage />}></Route>
     </Routes>
   </BrowserRouter>
 );
