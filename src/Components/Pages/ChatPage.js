@@ -90,6 +90,7 @@ const TextContainer = styled.div`
 
 const ChatContainer = styled.div`
   max-width: 60rem;
+  max-width: 95vw;
   width: 60rem;
   text-align: left;
 `;
