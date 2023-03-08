@@ -57,6 +57,7 @@ export async function GetChatResponse(message) {
   );
 }
 
+/*
 const serverIp = "92.34.6.221";
 let currentIp = null;
 
@@ -72,18 +73,20 @@ export async function GetIsServer() {
 
   return currentIp === serverIp;
 }
+*/
 
 export async function GetBasePath(betapet) {
   let requestPath = betapet
     ? "https://sakurapi.se/betapet-bot-api"
     : "https://sakurapi.se/auto-builder";
 
+  /*
   let isServer = await GetIsServer();
   if (isServer) {
     requestPath = betapet
       ? "http://192.168.1.89/betapet-bot-api"
       : "http://192.168.1.89/auto-builder";
-  }
+  }*/
 
   if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
     //use local address if development
