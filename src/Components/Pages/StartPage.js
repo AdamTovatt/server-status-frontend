@@ -15,6 +15,10 @@ import Console from "../Console";
 import TabButtons from "../Input/TabButtons";
 import Header from "../Header";
 
+const ApiKeyTextFieldContainer = styled.div`
+  max-width: 90vw;
+`;
+
 const StartPage = () => {
   const [dialogText, setDialogText] = useState(null);
   const [counter, setCounter] = useState(0);
@@ -92,7 +96,6 @@ const StartPage = () => {
           buttons={[
             { path: "/", icon: "home" },
             { path: "/betapet", icon: "betapet" },
-            { path: "/chat", icon: "chat" },
           ]}
           currentButtonIndex={0}
         />
@@ -154,16 +157,18 @@ const StartPage = () => {
         ) : fetchingStatus ? (
           <Loader />
         ) : (
-          <TextField
-            type={"password"}
-            onSumbit={(text) => {
-              setHasFetched(false);
-              setCookie("apiKey", text);
-            }}
-            color={Color.Depth2}
-            placeHolder={"Enter api key..."}
-            title={"Api key"}
-          ></TextField>
+          <ApiKeyTextFieldContainer>
+            <TextField
+              type={"password"}
+              onSumbit={(text) => {
+                setHasFetched(false);
+                setCookie("apiKey", text);
+              }}
+              color={Color.Depth2}
+              placeHolder={"Enter api key..."}
+              title={"Api key"}
+            ></TextField>
+          </ApiKeyTextFieldContainer>
         )}
       </CenterContainer>
     </Page>
